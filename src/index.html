@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags always come first -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+
+	<!-- Other tags -->
+
+	<!-- Open graph tags -->
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="css/inline-style.css" inline>
+
+</head>
+
+<body>
+	<div class="container-fluid">
+		
+	</div>
+	<!-- JS -->
+	<noscript id="deferred-styles">
+		<link href="css/style.css" rel="stylesheet">
+		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+	</noscript>
+	<script>
+	  var loadDeferredStyles = function() {
+		var addStylesNode = document.getElementById("deferred-styles");
+		var replacement = document.createElement("div");
+		replacement.innerHTML = addStylesNode.textContent;
+		document.body.appendChild(replacement)
+		addStylesNode.parentElement.removeChild(addStylesNode);
+	  };
+	  var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+		  window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+	  if (raf) raf(function() { window.setTimeout(loadDeferredStyles, 0) });
+	  else window.addEventListener('load', loadDeferredStyles);
+	</script>
+	<script defer src="js/app.js"></script>
+</body>
+
+</html>
