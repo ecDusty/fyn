@@ -13,6 +13,7 @@ var zip = require('gulp-zip');
 //HTML Dependencies
 var htmlMinify = require('gulp-html-minifier');
 var plumber = require('gulp-plumber'); //Only good with HTML & CSS files
+var inlinesource = require('gulp-inline-source');
 
 //Scripts Dependencies
 var eslint = require('gulp-eslint');
@@ -226,6 +227,14 @@ gulp.task('html-dev', function () {
             removeComments: true
             }))
         .pipe(gulp.dest(TEST_DIR));
+});
+
+gulp.task('html-inline-dev', function() {
+    console.log(strt+'HTML inlining for test fold' + end);
+
+    return gulp.src(TEST_DIR+'/*.html')
+            .pipe(inlinesource())
+            .pipe(gulp.dest(TEST_DIR));
 });
 
 /*============
