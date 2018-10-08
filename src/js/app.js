@@ -10,13 +10,12 @@ function initMap() {
     disableDefaultUI:true
   });
 
-  var aberdeenSquare = {lat: 22.2485, lng:114.1542};
-  var marker = new google.maps.Marker({
+  const aberdeenSquare = {lat: 22.2485, lng:114.1542};
+  const marker = new google.maps.Marker();
+  markers.push(new google.maps.Marker({
     position: aberdeenSquare,
     map:map,
     title: 'First marker YAY!'
-  });
-
-  markers.push(marker);
+  }))
 // we used, 40.7413549, -73.99802439999996 or your own!
 }
