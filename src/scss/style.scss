@@ -77,3 +77,16 @@ body {
 .vh-100 {
   height: 100vh !important;
 }
+
+#interface {
+  max-width:400px;
+}
+
+@media screen and (max-width:992px){
+  #map {
+    max-height:calc(100% - 50px);
+  }
+  #interface {
+    height: 50px;
+  }
+}

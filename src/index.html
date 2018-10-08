@@ -18,7 +18,12 @@
 
 <body>
 	<div class="container-fluid vh-100">
-    <div class="row h-100"><div id="map" class="col-12 h-100"></div>  <!-- Map Element --></div>
+    <div class="row h-100">
+			<div id="map" class="h-100 col order-lg-2"></div>
+			<div id="inteface" class="col-lg-3 order-lg-1">
+				<h1 data-bind="text: title"></h1>
+			</div>
+		</div>
 	</div>
 	<!-- JS -->
 	<noscript id="deferred-styles">
@@ -38,9 +43,10 @@
 	  if (raf) raf(function() { window.setTimeout(loadDeferredStyles, 0) });
 	  else window.addEventListener('load', loadDeferredStyles);
 	</script>
-  <script defer src="js/app.js"></script>
-  <script async defer
-  src="https://maps.googleapis.com/maps/api/js??libraries=places,geometry,drawing&key=AIzaSyAaYL795gcBKEjS2Ud2Rb12A7hebgrT-Fc&v=3&callback=initMap">></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+  <script src="js/app.js"></script>
+  <!-- <script async defer
+  src="https://maps.googleapis.com/maps/api/js??libraries=places,geometry,drawing&key=AIzaSyAaYL795gcBKEjS2Ud2Rb12A7hebgrT-Fc&v=3&callback=octo.initMap"></script> -->
 </body>
 
 </html>
