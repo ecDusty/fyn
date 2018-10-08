@@ -12,8 +12,10 @@ var zip = require('gulp-zip');
 
 //HTML Dependencies
 var htmlMinify = require('gulp-html-minifier');
+var minifyHTML = require('gulp-htmlmin');
 var plumber = require('gulp-plumber'); //Only good with HTML & CSS files
 var inlineSource = require('gulp-inline-source');
+
 
 //Scripts Dependencies
 var eslint = require('gulp-eslint');
@@ -30,7 +32,10 @@ var imgS = require('gulp-image');
 
 //Servers Dependencies
 var browserSync = require('browser-sync').create();
-var reload = browserSync.reload;
+var reload = function(done) {
+  browserSync.reload;
+  done()
+};
 
 /*============
 = File Paths =
@@ -193,17 +198,13 @@ gulp.task('html-dist', function () {
   console.log(strt + 'HTML for DIST' + end);
 
   return gulp.src(HTML_PATH)
-    .pipe(plumber(function (err) {
-      console.log('---HTML Task Error');
-      console.log(err);
-      console.log('----Error End');
-      this.emit('end');
-    }))
-    .pipe(htmlMinify({
-      collapseWhitespace: true,
-      minifyCSS: true,
-      minifyJS: true,
-      removeComments: true
+    .pipe(inlineSource())
+    .pipe(minifyHTML({
+      collapseWhitespace:true,
+      collapseInlineTagWhitespace:true,
+      minifyJS:true,
+      removeComments:true,
+      removeEmptyAttributes:true
     }))
     .pipe(gulp.dest(DIST_DIR));
 });
@@ -217,13 +218,14 @@ gulp.task('html-dev', ['sass-dev'], function () {
   console.log(strt + 'HTML for DEV' + end);
 
   return gulp.src(HTML_PATH)
-    .pipe(plumber(function (err) {
-      console.log('---HTML Task Error');
-      console.log(err);
-      console.log('----Error End');
-      this.emit('end');
-    }))
     .pipe(inlineSource())
+    .pipe(minifyHTML({
+      collapseWhitespace:true,
+      collapseInlineTagWhitespace:true,
+      minifyJS:true,
+      removeComments:true,
+      removeEmptyAttributes:true
+    }))
     .pipe(gulp.dest(TEST_DIR));
 });
 
@@ -249,10 +251,6 @@ gulp.task('images-dev', function () {
 
   return gulp.src(IMG_PATH)
     .pipe(gulp.dest(TEST_DIR));
-});
-
-gulp.task('reload', function() {
-  return reload()
 });
 
 /*============
@@ -282,21 +280,47 @@ gulp.task('serve:dist', function() {
 =  for Dev   =
 =============*/
 gulp.task('serve:dev', function() {
-
-  gulp.watch(SCRIPTS_PATH, ['scripts-dev']);
-  gulp.watch(JAS_PATH,['jasmine-dev']);
-  gulp.watch(IMG_PATH, ['images-dev']);
-  gulp.watch(SCSS_PATH, ['html-dev']);
-  gulp.watch(HTML_PATH, ['html-dev']);
+  gulp.watch(SCRIPTS_PATH, ['scripts-dev-watch']);
+  gulp.watch(JAS_PATH,['jasmine-dev-watch']);
+  gulp.watch(IMG_PATH, ['images-dev-watch']);
+  gulp.watch(SCSS_PATH, ['html-dev-watch']);
+  gulp.watch(HTML_PATH, ['html-dev-watch']);
 
   browserSync.init({
       server: {
-      baseDir: TEST_DIR+'/',
-      domain: 'local.dev'
+      baseDir: TEST_DIR+'/'
   }
   });
 
-  gulp.watch([TEST_DIR+'/**/*.css', TEST_DIR+'/**/*.js', TEST_DIR+'/**/*.{png,jpeg,jpg,gif,svg}', TEST_DIR+'/*.html'], ['reload']);
+  gulp.watch(TEST_DIR+'/{**/*,*}').on('change',reload);
+});
+
+
+
+/*============
+=  WATCHING  =
+=  Gulp      =
+=   Serve    =
+=============*/
+
+gulp.task('scripts-dev-watch',['scripts-dev'], function(done) {
+  browserSync.reload()
+  done()
+});
+
+gulp.task('images-dev-watch',['images-dev'], function(done) {
+  browserSync.reload()
+  done()
+});
+
+gulp.task('css-dev-watch',['css-dev'], function(done) {
+  browserSync.reload()
+  done()
+});
+
+gulp.task('html-dev-watch',['html-dev'], function(done) {
+  browserSync.reload()
+  done()
 });
 
 /*============
