@@ -20,6 +20,7 @@
 @import "bootstrap/buttons";
 @import "bootstrap/transitions";
 @import "bootstrap/dropdown";
+
 @import "bootstrap/button-group";
 @import "bootstrap/input-group";
 @import "bootstrap/custom-forms";
@@ -55,6 +56,24 @@
 @import "bootstrap/utilities/text";
 @import "bootstrap/utilities/visibility";
 
+//First theme idea
+$theme1-c1:#042A2B;
+$theme1-c2:#087E8B;
+$theme1-c3:#CDEDF6;
+$theme1-c4:#BFD7EA;
+$theme1-c5:#FF5A5F;
+
+//Second theme idea
+$theme2-c1:#55D6BE;
+$theme2-c2:#ACFCD9;
+$theme2-c3:#1D1E18;
+$theme2-c4:#DDD;
+$theme2-c5:#F06543;
+
 body {
   background-color: #e6e6e6;
+}
+
+.vh-100 {
+  height: 100vh !important;
 }
