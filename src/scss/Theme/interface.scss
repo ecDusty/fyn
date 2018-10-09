@@ -1,0 +1,16 @@
+#interface {
+  height: 50px;
+  overflow:hidden;
+  background-color: $activeT-c1;
+
+  h1,h2,h3,h4,h5,p {
+    color:$white;
+  }
+}
+
+@media screen and (min-width:992px){
+  #interface {
+    max-width:400px;
+    height:auto;
+  }
+}

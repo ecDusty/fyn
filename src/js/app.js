@@ -272,6 +272,6 @@ const view = {
 
 // KNOCKOUT CODING SECTION
 function FynViewModel() {
-  this.title = "FYN - Find your Neighborhood";
+  this.title = ko.observable("FYN - Find your Neighborhood");
 }
 ko.applyBindings(new FynViewModel());
