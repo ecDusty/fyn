@@ -66,5 +66,6 @@ body {
 }
 
 //Load the specific interface styles
+@import "outsourced.scss";
 @import "interface.scss";
 @import "map.scss";
