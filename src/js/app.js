@@ -1,5 +1,30 @@
 /* global google, ko */
 
+//Asynchronously load Scripts
+function loadMapsScript(key) {
+  const gMaps = `https://maps.googleapis.com/maps/api/js`,
+        arrayLibraries = [`places`,`geometry`];
+  arrayLibraries.join
+
+  return new Promise(function(resolve, reject){
+    let script = document.createElement('script');
+    script.src = `${gMaps}?libraries=${arrayLibraries.join()}&key=${key}`;
+    script.onload = () => resolve();
+    script.onerror = () => reject(script.src);
+
+    document.head.appendChild(script);
+  })
+}
+
+loadMapsScript(`AIzaSyAaYL795gcBKEjS2Ud2Rb12A7hebgrT-Fc`)
+.then(function(response){
+  console.log('We have a promise working baby! \nOh YEAH!!!\nCELEBRATE GOOD TIMES');
+  octo.initMap();
+}).catch(function(response){
+  console.log('Looks like the first URL failed. Time to slowly walk away.');
+  console.log(response);
+});
+
 // Custom Code for application build
 let map = {},
     markers = [];
@@ -248,7 +273,6 @@ const model = {
 const octo = {
 
   initMap: function() {
-    fetch()
     model.map = new google.maps.Map(document.getElementById('map'), {
       center: model.testMarker,
       zoom: 11,
