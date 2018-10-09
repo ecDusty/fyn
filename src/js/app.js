@@ -18,7 +18,6 @@ function loadMapsScript(key) {
 
 loadMapsScript(`AIzaSyAaYL795gcBKEjS2Ud2Rb12A7hebgrT-Fc`)
 .then(function(response){
-  console.log('We have a promise working baby! \nOh YEAH!!!\nCELEBRATE GOOD TIMES');
   octo.initMap();
 }).catch(function(response){
   console.log('Looks like the first URL failed. Time to slowly walk away.');
