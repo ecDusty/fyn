@@ -46,7 +46,7 @@ var reload = function(done) {
 var SCRIPTS_PATH = 'src/js/{*.js,**/*.js}',
   HTML_PATH = 'src/*.html',
   IMG_PATH = 'src/images/*.{png,jpeg,jpg,gif,svg}',
-  SCSS_PATH = 'src/scss/*.scss',
+  SCSS_PATH = 'src/scss/{*,**/*}.scss',
   JAS_PATH = 'src/jasmine/{*,**/*,**/**/*}',
   AUD_PATH = 'src/audio/*.mp3';
 
