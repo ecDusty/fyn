@@ -77,12 +77,15 @@ As I develop on a Windows machine, these instructions are for windows users usin
 
 ### Credit
 
-The work of asynchronysly loading outside scourced scripts originally came from [JavaScript.info][2]'s website. Showing how to combine promises with the act of loading scripts.
+1) The work of asynchronysly loading outside scourced scripts originally came from [JavaScript.info][2]'s website. Showing how to combine promises with the act of loading scripts.
+
+2) Loading Animation from [LOADING.IO][3]
 
 ### Sources
 
 [1]: https://nodejs.org/en/
 [2]: https://javascript.info/callbacks
+[3]: https://loading.io/css/
 
 ### To Do List
 
