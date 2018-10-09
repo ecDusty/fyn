@@ -23,15 +23,19 @@
   100% { opacity: 1; }
 }
 
+.ldsring {
+  margin:0 auto;
+}
 
 .loading {
   text-align: center;
   padding-top: calc(50vh - 1.7em);
-  animation: Mapload 5s ease-in-out  infinite reverse;
+  // animation: Mapload 5s ease-in-out  infinite reverse;
   color: $activeT-c2;
 
   span {
     margin-right:5px;
+    display: none;
   }
 
   .dotOne {
