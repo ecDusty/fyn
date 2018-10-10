@@ -1,4 +1,4 @@
-/* global google, ko */
+/* global google, ko, console */
 
 //Asynchronously load Scripts
 function loadMapsScript(key) {
@@ -18,10 +18,9 @@ function loadMapsScript(key) {
 
 loadMapsScript(`AIzaSyAaYL795gcBKEjS2Ud2Rb12A7hebgrT-Fc`)
 .then(function(response){
-  octo.initMap();
+  octo.initMap(response);
 }).catch(function(response){
-  console.log('Looks like the first URL failed. Time to slowly walk away.');
-  console.log(response);
+  alert(`Looks like the first URL failed. Time to slowly walk away.\n${response}`);
 });
 
 // Custom Code for application build

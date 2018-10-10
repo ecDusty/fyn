@@ -1,14 +1,14 @@
 { 
     "presets": [
-    ["env", {
-        "targets": {
-            "browsers": [ 
-                "last 2 versions",
-                "safari >= 7",
-                "> 1%",
-                "not dead"
-            ]
-        }
-    }]
+        ["env", {
+            "targets": {
+                "browsers": [ 
+                    "last 2 versions",
+                    "safari >= 7",
+                    "> 1%",
+                    "not dead"
+                ]
+            }
+        }]
     ]
 }

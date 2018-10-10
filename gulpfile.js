@@ -133,7 +133,6 @@ gulp.task('jasmine-dist', function () {
   console.log(strt + 'JASMINE TESTING ENVIRONMENT' + end);
 
   return gulp.src(JAS_PATH)
-    .uglify()
     .pipe(gulp.dest(TEST_DIR+'/jasmine'));
 });
 
