@@ -1,15 +1,23 @@
 
 
+h1,h2,h3,h4,h5,p {
+  color:$white;
+}
+
+h1 { font-size:2em; }
+h2 { font-size: 1.5em; }
+
 #interface {
   height: 60px;
   overflow:hidden;
   background-color: $activeT-c1;
   padding: 0;
-
-  h1,h2,h3,h4,h5,p {
-    color:$white;
-  }
 }
+
+.interfaceView {
+  padding: 15px;
+}
+
 
 /*================
    FYN - Menu
@@ -49,6 +57,7 @@ ul.menuWrap {
       left: 50%;
       z-index:99;
       transition: all 0.15s ease-out;
+      animation: menuTitles 2s ease-out ; 
     }
   }
 
@@ -64,4 +73,10 @@ ul.menuWrap {
     max-width:400px;
     height:auto;
   }
+}
+
+@keyframes menuTitles {
+  0% { top: 45px; }
+  92% { top: 45px; }
+  100% { top: 100%; }
 }

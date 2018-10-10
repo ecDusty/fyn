@@ -272,7 +272,12 @@ gulp.task('serve:dist', function() {
 =   Server   =
 =  for Dev   =
 =============*/
-gulp.task('serve:dev', function() {
+gulp.task('serve:dev', ['scripts-dev',
+  'jasmine-dev',
+  'resources-dev',
+  'images-dev',
+  'html-dev'],
+  function() {
 
   browserSync.init({
       server: {
@@ -353,13 +358,6 @@ gulp.task('export', ['dist'], function () {
 //This function will clean out your distribution folder, and then update it with all the recent changes. After running this, it's best to run 'gulp serve' to get your live preview playing.
 gulp.task('default', [
   'clean',
-  'scripts-dev',
-  'jasmine-dev',
-  'resources-dev',
-  'images-dev',
-  'html-dev',
   'serve:dev'
-], function(done){
-  browserSync.reload()
-});
+]);
 
