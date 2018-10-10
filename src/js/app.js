@@ -659,7 +659,35 @@ const view = {
 }
 
 // KNOCKOUT CODING SECTION
+//
+
+//Menu Items
+//
+
+
 function FynViewModel() {
-  this.title = ko.observable("FYN - Find your Neighborhood");
+  const self = this;
+  self.title = ko.observable(`FYN - Find your Neighborhood`);
+  self.activeInterface = ko.observable();
+
+  //Menu Data
+  //
+  self.MenuVM = function (name,icon) {
+    const self = this;
+    self.name = name;
+    self.icon = icon;
+    self.alt = `${name} icon`;
+  }
+
+
+  self.menu = [
+    new self.MenuVM(`Homes`,`/images/home.svg`),
+    new self.MenuVM(`Places`,`/images/map.svg`),
+    new self.MenuVM(`Filters`,`/images/shuffle.svg`),
+    new self.MenuVM(`Settings`,`/images/cog.svg`)
+  ]
+  self.setActive = function(active){
+    self.activeInterface(active)
+  };
 }
 ko.applyBindings(new FynViewModel());
