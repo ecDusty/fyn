@@ -5,15 +5,13 @@ var strt = '>---Starting ',
 //Dependencies Needed
 var gulp = require('gulp');
 var rename = require('gulp-rename');// not sure I need this
-var concat = require('gulp-concat');
+var concat = require('gulp-concat');// not sure I need this
 var srcMaps = require('gulp-sourcemaps');
 var del = require('del');
 var zip = require('gulp-zip');
 
 //HTML Dependencies
-var htmlMinify = require('gulp-html-minifier');
 var minifyHTML = require('gulp-htmlmin');
-var plumber = require('gulp-plumber'); //Only good with HTML & CSS files
 var inlineSource = require('gulp-inline-source');
 
 
@@ -24,7 +22,6 @@ var babel = require('gulp-babel');
 
 //Styles Dependencies
 var autoprefixer = require('gulp-autoprefixer');
-// var cleanCSS = require('gulp-clean-css');
 var sass = require('gulp-sass');
 
 //Image Dependencies
@@ -32,10 +29,6 @@ var imgS = require('gulp-image');
 
 //Servers Dependencies
 var browserSync = require('browser-sync').create();
-var reload = function(done) {
-  browserSync.reload;
-  done()
-};
 
 /*============
 = File Paths =
@@ -272,7 +265,7 @@ gulp.task('serve:dist', function() {
   }
   });
 
-  gulp.watch([DIST_DIR+'/**/*.css', DIST_DIR+'/**/*.js', DIST_DIR+'/**/*.{png,jpeg,jpg,gif,svg}',DIST_DIR+'/{*.html,**/*.html}']).on('change', reload);
+  gulp.watch([DIST_DIR+'/**/*.css', DIST_DIR+'/**/*.js', DIST_DIR+'/**/*.{png,jpeg,jpg,gif,svg}',DIST_DIR+'/{*.html,**/*.html}']).on('change', browserSync.reload);
 });
 
 /*============
@@ -292,7 +285,7 @@ gulp.task('serve:dev', function() {
   }
   });
 
-  gulp.watch(TEST_DIR+'/{**/*,*}').on('change',reload);
+  // gulp.watch(TEST_DIR+'/{**/*,*}').on('change',reload);
 });
 
 
@@ -367,5 +360,7 @@ gulp.task('default', [
   'images-dev',
   'html-dev',
   'serve:dev'
-]);
+], function(done){
+  browserSync.reload()
+});
 
