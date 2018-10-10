@@ -232,7 +232,7 @@ gulp.task('images-dist', function () {
 
   return gulp.src(IMG_PATH)
     .pipe(imgS())
-    .pipe(gulp.dest(DIST_DIR));
+    .pipe(gulp.dest(DIST_IMG));
 });
 
 /*============
@@ -243,7 +243,8 @@ gulp.task('images-dev', function () {
   console.log(strt + 'Images for DEV' + end);
 
   return gulp.src(IMG_PATH)
-    .pipe(gulp.dest(TEST_DIR));
+    .pipe(imgS())
+    .pipe(gulp.dest(TEST_IMG));
 });
 
 /*============
@@ -273,11 +274,6 @@ gulp.task('serve:dist', function() {
 =  for Dev   =
 =============*/
 gulp.task('serve:dev', function() {
-  gulp.watch(SCRIPTS_PATH, ['scripts-dev-watch']);
-  gulp.watch(JAS_PATH,['jasmine-dev-watch']);
-  gulp.watch(IMG_PATH, ['images-dev-watch']);
-  gulp.watch(SCSS_PATH, ['html-dev-watch']);
-  gulp.watch(HTML_PATH, ['html-dev-watch']);
 
   browserSync.init({
       server: {
@@ -285,7 +281,11 @@ gulp.task('serve:dev', function() {
   }
   });
 
-  // gulp.watch(TEST_DIR+'/{**/*,*}').on('change',reload);
+  gulp.watch(SCRIPTS_PATH, ['scripts-dev-watch']);
+  gulp.watch(JAS_PATH,['jasmine-dev-watch']);
+  gulp.watch(IMG_PATH, ['images-dev-watch']);
+  gulp.watch(SCSS_PATH, ['html-dev-watch']);
+  gulp.watch(HTML_PATH, ['html-dev-watch']);
 });
 
 
