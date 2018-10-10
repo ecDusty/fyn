@@ -24,20 +24,27 @@
 				<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
 			</div>
 			<div id="interface" class="col-lg-3 order-lg-1">
-				<nav id="menu">
-					<ul>
-						<li class="menuItem"></li>
-						<li class="menuItem"></li>
-						<li class="menuItem"></li>
-						<li class="menuItem"></li>
-					</ul>
+				<nav id="menu" data-bind="">
+						<ul class="menuWrap" data-bind="template: { name: 'menuTemplate', foreach: menu, as: 'item' }">
+						</ul>
+
 				</nav>
-				<h1 data-bind="text: title"></h1>
-				div.addAddress>
+				<div class="interfaceView" data-bind=""></div>
+
 			</div>
 		</div>
 	</div>
-	<!-- JS -->
+
+	<!-- KNOCKOUT HTML Templates -->
+	<script type="text/html" id="menuTemplate">
+			<li class="menuItem">
+				<img data-bind="attr: { src: item.icon, alt: item.alt, title: item.name }">
+				<p data-bind="text: item.name"></p>
+			</li>
+		</ul>
+	</script>
+
+	<!-- Defferred CSS Styles -->
 	<noscript id="deferred-styles">
 		<link href="css/style.css" rel="stylesheet">
 		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
