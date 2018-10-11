@@ -17,45 +17,55 @@
 </head>
 
 <body>
-	<div class="container-fluid vh-100">
+	<div class="container-fluid h-100">
     <div class="row h-100">
-			<div id="map" class="h-100 col order-lg-2">
+			<div id="map" class="col order-lg-2">
 				<h3 class="loading">Map Loading<span class="dotOne">&nbsp;.</span><span class="dotTwo">.</span><span class="dotThree">.</span></h3>
 				<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
 			</div>
 			<div id="interface" class="col-lg-3 order-lg-1">
 				<nav id="menu" data-bind="">
-						<ul class="menuWrap" data-bind="template: { name: 'menuTemplate', foreach: menu, as: 'item' }">
+						<ul class="menuWrap" data-bind="template: { name: 'Menu', foreach: menuItems, as: 'item' }">
 						</ul>
 
 				</nav>
-				<div class="interfaceView" data-bind="">
-					<h2 class="homes title">Add your Place(s)</h2>
-					<input type="text" name="" id="" class="search">
-					<select name="" id="">
-						<option value="">Hong Kong</option>
-					</select>
-					<button id="home-add">ADD</button>
-					<button id="home-list">SHOW LIST</button>
+				<div class="interfaceView" data-bind="template: { name: 'pickHome' }">
 				</div>
 
 			</div>
 		</div>
-	</div>
+  </div>
+  <div id="welcome">
+    <div class="logo-Wrapper"><img src="images/fyn-logo-color.gif" alt="FYN color logo" class="logo"></div>
+  </div>
 
 	<!-- KNOCKOUT HTML Templates -->
-	<script type="text/html" id="menuTemplate">
-			<li class="menuItem">
+
+	<!-- Menu template -->
+	<script type="text/html" id="Menu">
+			<li class="menuItem" data-bind="css: { active: item.active() == true }, click: item.setActive ">
 				<img data-bind="attr: { src: item.icon, alt: item.alt, title: item.name }">
-				<p data-bind="text: item.name"></p>
+				<p class="title" data-bind="text: item.name"></p>
 			</li>
 		</ul>
+	</script>
+
+	<!-- Search for home template -->
+	<script type="text/html" id="pickHome">
+		<h2 class="homes title">Add your Place(s)</h2>
+		<input data-bind="value: hSearch.name" type="text" placeholder="Very clean apartment" name="" id="h-name" class="search">
+		<input data-bind="value: hSearch.street" type="text" placeholder="23 Happy Valley St." name="" id="h-street" class="search">
+    <input data-bind="value: hSearch.city" type="text" placeholder="Causeway Bay" name="" id="h-city" class="search">
+		<input data-bind="value: hSearch.country" type="text" placeholder="Hong Kong SAR" name="" id="h-country" class="search">
+		<button id="home-search" data-bind="click: searchMarker">FIND</button>
+		<button id="home-add" data-bind="click:">ADD</button>
+		<button id="home-list">SHOW LIST</button>
 	</script>
 
 	<!-- Defferred CSS Styles -->
 	<noscript id="deferred-styles">
 		<link href="css/style.css" rel="stylesheet">
-		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+		<!-- <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> -->
 	</noscript>
 	<script>
 	  var loadDeferredStyles = function() {
@@ -70,8 +80,8 @@
 	  if (raf) raf(function() { window.setTimeout(loadDeferredStyles, 0) });
 	  else window.addEventListener('load', loadDeferredStyles);
 	</script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
-  <script src="js/app.js"></script>
+	<script defer src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+  <script async defer src="js/app.js"></script>
  
 	<!-- <script async defer
 	src="https://maps.googleapis.com/maps/api/js??libraries=places,geometry,drawing&key=AIzaSyAaYL795gcBKEjS2Ud2Rb12A7hebgrT-Fc&v=3&callback=octo.initMap"></script> 

@@ -12,6 +12,10 @@ h2 { font-size: 1.5em; }
   overflow:hidden;
   background-color: $activeT-c1;
   padding: 0;
+
+  &.right {
+    order:3;
+  }
 }
 
 .interfaceView {
@@ -59,12 +63,14 @@ ul.menuWrap {
       transition: all 0.15s ease-out;
       animation: menuTitles 2s ease-out ; 
     }
+
+    &:hover {
+      p.title { transition: all 0.05s ease-out; }
+    }
   }
 
   &:hover {
-    p {
-      top: 45px;
-    }
+    p.title { top: 45px; }
   }
 }
 
