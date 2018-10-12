@@ -45,14 +45,13 @@ ul.menuWrap {
     overflow:hidden;
     transition: all 0.15s ease-out;
 
-    &:last-child { border-right: none; }
-
     img {
       width:35px;
       height:35px;
+      transition: all 0.15s ease-out;
     }
 
-    p {
+    p.title {
       position: absolute;
       font-size: 0.6em;
       margin: 0;
@@ -67,6 +66,50 @@ ul.menuWrap {
     &:hover {
       p.title { transition: all 0.05s ease-out; }
     }
+
+    &:last-child { border-right: none; }
+
+    &.active {
+      img {
+        opacity: 0;
+      }
+
+      p.title {
+        top: 45px;
+      }
+
+      &:before {
+        top:50%;
+        opacity: 1;
+      }
+
+      &:after {
+        bottom:50%;
+        opacity: 1;
+      }
+    }
+
+    &:before, &:after {
+      position:absolute;
+      height: 30px;
+      width: 30px;
+      left: 50%;
+      opacity: 0;
+      transition:all 0.15s ease-out;
+    }
+
+    &:before {
+      content: url('images/chevron-down.svg');
+      top: -10%;
+      transform: translate(-50%,-65%);
+    }
+
+    &:after {
+      content: url('images/chevron-up.svg');
+      bottom: 110%;
+      transform: translate(-50%,65%);
+    }
+
   }
 
   &:hover {

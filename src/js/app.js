@@ -694,7 +694,8 @@ function FynViewModel() {
   self.activeInterface = ko.observable();
   self.error = ko.observable(false);
 
-
+//
+//
 
 
   //Menu Data & Controls
@@ -704,17 +705,18 @@ function FynViewModel() {
     this.icon = icon;
     this.alt = `${name} icon`;
     this.active = ko.observable(false);
-    this.setActive = () => this.active(true)
   }
 
-  self.menuactiveTemp = ko.observable('Menu')
+  self.activeMenu = ko.observable('start');
 
   self.menuRemoveActive = function(item) {
-    if (item.active())
+    if (item.active()) {
       item.active(false);
-    else {
+      self.activeMenu('start');
+    } else {
       for (const menu of self.menuItems) { menu.active(false); }
       item.active(true);
+      self.activeMenu(item.name);
     }
   }
 
@@ -729,10 +731,14 @@ function FynViewModel() {
     self.activeInterface(active)
   };
 
-  // Homes Data & Controls
+  // === HOMES ===
+  // Data & Controls
   //
   //
 
+  //Control Home Interface view
+
+  //Searching for homes
   self.hSearch = {
     name: ko.observable(''),
     street: ko.observable(''),

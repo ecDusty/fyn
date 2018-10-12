@@ -29,7 +29,7 @@
 						</ul>
 
 				</nav>
-				<div class="interfaceView" data-bind="template: { name: 'pickHome' }">
+				<div class="interfaceView" data-bind="template: { name: activeMenu }">
 				</div>
 
 			</div>
@@ -51,15 +51,31 @@
 	</script>
 
 	<!-- Search for home template -->
-	<script type="text/html" id="pickHome">
+	<script type="text/html" id="start">
+	</script>
+
+	<!-- Homes interface template -->
+	<script type="text/html" id="Homes">
 		<h2 class="homes title">Add a Place</h2>
 		<input data-bind="textInput: hSearch.name " type="text" placeholder="Very clean apartment" name="" id="h-name" class="search">
 		<input data-bind="textInput: hSearch.street" type="text" placeholder="23 Happy Valley St." name="" id="h-street" class="search">
     <input data-bind="textInput: hSearch.city" type="text" placeholder="Causeway Bay" name="" id="h-city" class="search">
 		<input data-bind="textInput: hSearch.country" type="text" placeholder="Hong Kong SAR" name="" id="h-country" class="search">
 		<button id="home-search" data-bind="click: searchMarker">FIND</button>
-		<button id="home-add" data-bind="click:">ADD</button>
 		<button id="home-list">SHOW LIST</button>
+	</script>
+
+	<!-- Places interface template -->
+	<script type="text/html" id="Places">
+	</script>
+
+
+	<!-- Filter Interface template -->
+	<script type="text/html" id="Filters">
+	</script>
+
+	<!-- Settings Interface Template -->
+	<script type="text/html" id="Settings">
 	</script>
 
 	<!-- Defferred CSS Styles -->
