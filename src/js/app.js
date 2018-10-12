@@ -717,7 +717,7 @@ function FynViewModel() {
 
   self.menuRemoveActive = function(item) {
       for (self.menuItems of menu) {
-          menu.active(false):
+          menu.active(false);
       }
 
       item.active(true);
