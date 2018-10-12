@@ -43,7 +43,7 @@
 
 	<!-- Menu template -->
 	<script type="text/html" id="Menu">
-			<li class="menuItem" data-bind="css: { active: item.active() == true }, click: item.setActive ">
+			<li class="menuItem" data-bind="css: { active: item.active() == true }, click: $root.menuRemoveActive ">
 				<img data-bind="attr: { src: item.icon, alt: item.alt, title: item.name }">
 				<p class="title" data-bind="text: item.name"></p>
 			</li>

@@ -710,10 +710,18 @@ function FynViewModel() {
     this.icon = icon;
     this.alt = `${name} icon`;
     this.active = ko.observable(false);
-    this.setActive = () => this.active() ? this.active(false) : this.active(true);
+    this.setActive = () => this.active(true)
   }
 
   self.menuactiveTemp = ko.observable('Menu')
+
+  self.menuRemoveActive = function(item) {
+      for (self.menuItems of menu) {
+          menu.active(false):
+      }
+
+      item.active(true);
+  }
 
   self.menuItems = [
     new self.MenuVM(`Homes`,`images/home.svg`),
@@ -737,6 +745,7 @@ function FynViewModel() {
   }
 
   self.searchMarker = function () {
+      console.log('Fire SearchMarker')
     self.Gmap.findPlace({
       query:'',
       fields:[`${self.hSearch.street}, ${self.hSearch.city}${self.hSearch.country}`]
