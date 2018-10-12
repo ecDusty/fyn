@@ -645,7 +645,7 @@ class G_Model {
   //Asychronously Load Map scripts
   loadMap(API) {
     const gMaps = `https://maps.googleapis.com/maps/api/js`,
-          arrayLibraries = [`places`,`geometry`];
+      arrayLibraries = [`places`,`geometry`];
 
     return new Promise(function(resolve, reject){
       let script = document.createElement('script');
@@ -694,6 +694,9 @@ function FynViewModel() {
   self.activeInterface = ko.observable();
   self.error = ko.observable(false);
 
+
+
+
   //Menu Data & Controls
   //
   self.MenuVM = function (name,icon) {
@@ -710,9 +713,7 @@ function FynViewModel() {
     if (item.active())
       item.active(false);
     else {
-      for (const menu of self.menuItems) {
-          menu.active(false);
-      }
+      for (const menu of self.menuItems) { menu.active(false); }
       item.active(true);
     }
   }
@@ -740,7 +741,6 @@ function FynViewModel() {
   }
 
   self.searchMarker = function (fields) {
-    console.log(self.hSearch.name() +'\n' + self.hSearch.street())
     self.Gmap.findPlace({
       query:`${self.hSearch.street()}, ${self.hSearch.city()}, ${self.hSearch.country()}`,
       fields: ['formatted_address','name','geometry']
@@ -749,8 +749,7 @@ function FynViewModel() {
 
   self.addMarker = function (results,status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
-      console.log(results);
-      self.Gmap.createMarker({ position: results[0].geometry.location });
+      self.Gmap.createMarker({ position: results[0].geometry.location, title: self.hSearch.name() });
     } else {
       console.log(`${results} \n ${status}`)
       self.error(true);
