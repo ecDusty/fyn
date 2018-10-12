@@ -52,11 +52,11 @@
 
 	<!-- Search for home template -->
 	<script type="text/html" id="pickHome">
-		<h2 class="homes title">Add your Place(s)</h2>
-		<input data-bind="value: hSearch.name" type="text" placeholder="Very clean apartment" name="" id="h-name" class="search">
-		<input data-bind="value: hSearch.street" type="text" placeholder="23 Happy Valley St." name="" id="h-street" class="search">
-    <input data-bind="value: hSearch.city" type="text" placeholder="Causeway Bay" name="" id="h-city" class="search">
-		<input data-bind="value: hSearch.country" type="text" placeholder="Hong Kong SAR" name="" id="h-country" class="search">
+		<h2 class="homes title">Add a Place</h2>
+		<input data-bind="textInput: hSearch.name " type="text" placeholder="Very clean apartment" name="" id="h-name" class="search">
+		<input data-bind="textInput: hSearch.street" type="text" placeholder="23 Happy Valley St." name="" id="h-street" class="search">
+    <input data-bind="textInput: hSearch.city" type="text" placeholder="Causeway Bay" name="" id="h-city" class="search">
+		<input data-bind="textInput: hSearch.country" type="text" placeholder="Hong Kong SAR" name="" id="h-country" class="search">
 		<button id="home-search" data-bind="click: searchMarker">FIND</button>
 		<button id="home-add" data-bind="click:">ADD</button>
 		<button id="home-list">SHOW LIST</button>

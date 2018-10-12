@@ -659,23 +659,14 @@ class G_Model {
 
   createMarker(mark = { position: {}, title: '', icon: ''}) {
     const self = this,
-          icon = mark.icon;
-    if(icon) {
-      return new google.maps.Marker({
-        map: self.map,
-        position: mark.position,
-        title: mark.title,
-        icon: icon,
-        animation: google.maps.Animation.DROP
-      })
-    } else {
-      return new google.maps.Marker({
-        map: self.map,
-        position: mark.position,
-        title: mark.title,
-        animation: google.maps.Animation.DROP
-      })
-    }
+          marker = { map:self.map }
+
+    mark.position ? marker.position = mark.position : mark.position;
+    mark.title ? marker.title = mark.title : mark.position;
+    mark.icon ? marker.icon = mark.icon : mark.icon;
+    marker.animation = google.maps.Animation.DROP
+
+    return new google.maps.Marker(marker);
   }
 
   findPlace(request,callback) {
@@ -716,11 +707,14 @@ function FynViewModel() {
   self.menuactiveTemp = ko.observable('Menu')
 
   self.menuRemoveActive = function(item) {
-      for (self.menuItems of menu) {
+    if (item.active())
+      item.active(false);
+    else {
+      for (const menu of self.menuItems) {
           menu.active(false);
       }
-
       item.active(true);
+    }
   }
 
   self.menuItems = [
@@ -737,6 +731,7 @@ function FynViewModel() {
   // Homes Data & Controls
   //
   //
+
   self.hSearch = {
     name: ko.observable(''),
     street: ko.observable(''),
@@ -744,18 +739,20 @@ function FynViewModel() {
     country: ko.observable('')
   }
 
-  self.searchMarker = function () {
-      console.log('Fire SearchMarker')
+  self.searchMarker = function (fields) {
+    console.log(self.hSearch.name() +'\n' + self.hSearch.street())
     self.Gmap.findPlace({
-      query:'',
-      fields:[`${self.hSearch.street}, ${self.hSearch.city}${self.hSearch.country}`]
+      query:`${self.hSearch.street()}, ${self.hSearch.city()}, ${self.hSearch.country()}`,
+      fields: ['formatted_address','name','geometry']
     }, self.addMarker)
   }
 
   self.addMarker = function (results,status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
       console.log(results);
+      self.Gmap.createMarker({ position: results[0].geometry.location });
     } else {
+      console.log(`${results} \n ${status}`)
       self.error(true);
     }
   }
