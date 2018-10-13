@@ -713,9 +713,11 @@ function FynViewModel() {
     if (item.active()) {
       item.active(false);
       self.activeMenu('start');
+      self.intViewClass(false);
     } else {
       for (const menu of self.menuItems) { menu.active(false); }
       item.active(true);
+      self.intViewClass(true);
       self.activeMenu(item.name);
     }
   }
@@ -727,9 +729,17 @@ function FynViewModel() {
     new self.MenuVM(`Settings`,`images/cog.svg`)
   ]
 
-  self.setHomeActive = function(active){
-    self.activeInterface(active)
-  };
+//   self.setHomeActive = function(active){
+//     self.activeInterface(active)
+//     self.intViewClass(true)
+//   };
+
+// === Interface ==
+// General Settings
+// for INTERFACE
+//
+//
+  self.intViewClass = ko.observable(false);
 
   // === HOMES ===
   // Data & Controls
