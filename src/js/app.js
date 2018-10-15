@@ -751,14 +751,34 @@ function FynViewModel() {
   //Searching for homes
   self.hSearch = {
     name: ko.observable(''),
-    street: ko.observable(''),
-    city: ko.observable(''),
-    country: ko.observable('')
+    search: ko.observable(''),
+    hArray: new Array(),
+    savedArray: [],
+/*    hasSearch: ko.computed(function() {
+      return self.hSearch.hArray.length > 0 ? false : true;
+    }),*/
+    searchMark: function() {
+      self.Gmap.findPlace({
+        query:`${self.hSearch.search()}`,
+        fields: ['formatted_address','name','geometry']
+      }, self.hSearch.addMark);
+    },
+
+    addMark: function(results, status) {
+      if (status == google.maps.places.PlacesServiceStatus.OK) {
+        self.Gmap.createMarker({ position: results[0].geometry.location, title: self.hSearch.name() });
+      } else {
+        console.log(`${results} \n ${status}`);
+        self.error(status);
+      }
+    }
   }
 
-  self.searchMarker = function (fields) {
+  self.lasthSearch = null;
+
+  self.searchMarker = function () {
     self.Gmap.findPlace({
-      query:`${self.hSearch.street()}, ${self.hSearch.city()}, ${self.hSearch.country()}`,
+      query:`${self.hSearch.search()}`,
       fields: ['formatted_address','name','geometry']
     }, self.addMarker)
   }
@@ -768,7 +788,7 @@ function FynViewModel() {
       self.Gmap.createMarker({ position: results[0].geometry.location, title: self.hSearch.name() });
     } else {
       console.log(`${results} \n ${status}`)
-      self.error(true);
+      self.error(status);
     }
   }
   // App Initialization
@@ -782,12 +802,15 @@ function FynViewModel() {
       styles: G.mStyles[0],
       disableDefaultUI:true
     });
-    G.home.markers.push(new google.maps.Marker({
-      position: G.testMarker,
-      map: G.map,
-      title: 'First marker YAY!',
-      animation:google.maps.Animation.DROP
-    }))
+
+
+//  Original test marker
+    // G.home.markers.push(new google.maps.Marker({
+    //   position: G.testMarker,
+    //   map: G.map,
+    //   title: 'First marker YAY!',
+    //   animation:google.maps.Animation.DROP
+    // }))
 
   }
 

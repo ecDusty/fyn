@@ -56,13 +56,22 @@
 
 	<!-- Homes interface template -->
 	<script type="text/html" id="Homes">
-		<h2 class="homes title">Add a Place</h2>
-		<input data-bind="textInput: hSearch.name " type="text" placeholder="Very clean apartment" name="" id="h-name" class="search">
-		<input data-bind="textInput: hSearch.street" type="text" placeholder="23 Happy Valley St." name="" id="h-street" class="search">
-    <input data-bind="textInput: hSearch.city" type="text" placeholder="Causeway Bay" name="" id="h-city" class="search">
-		<input data-bind="textInput: hSearch.country" type="text" placeholder="Hong Kong SAR" name="" id="h-country" class="search">
-		<button id="home-search" data-bind="click: searchMarker">FIND</button>
-		<button id="home-list">SHOW LIST</button>
+		<div class="submenu homes">
+			<div class="submenu-item" data-bind="">
+				<h3>ADD PLACE</h3>
+			</div>
+			<div class="submenu-item" data-bind="">
+				<h3>SHOW LIST</h3>
+			</div>
+		</div>
+		<div class="interfaceWrap">
+		<h2 class="homes title">Find a Place</h2>
+		<form>
+		<input data-bind="textInput: hSearch.search " type="text" placeholder="Place / Address search" name="" id="h-name" class="search">
+		<button class="find" data-bind="click: hSearch.searchMark">FIND IT</button>
+		<button class="clear" data-bind="">CLEAR SEARCH</button>
+		</form>
+		</div>
 	</script>
 
 	<!-- Places interface template -->
