@@ -19,21 +19,16 @@ h2 { font-size: 1.5em; }
     order:3;
   }
 
-  #interfaceView {
+  #iView {
     height: 0;
     position: absolute;
     bottom: 100%;
 
     &.active{
       height: auto;
-      overflow-y: scroll;
       transition: height 0.2s ease-out;
     }
   }
-}
-
-#interfaceView {
-  padding: 15px;
 }
 
 @media screen and (min-width:992px){
@@ -41,7 +36,7 @@ h2 { font-size: 1.5em; }
     max-width:400px;
     height:auto;
 
-    #interfaceView {
+    #iView {
       position: static;
     }
   }

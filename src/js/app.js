@@ -13,6 +13,8 @@ const view = {
 
 }
 
+let gMap = {}
+
 
 class G_Model {
   constructor(API = 'AIzaSyAaYL795gcBKEjS2Ud2Rb12A7hebgrT-Fc',mapElement = document.getElementById('map')) {
@@ -657,14 +659,14 @@ class G_Model {
     })
   }
 
-  createMarker(mark = { position: {}, title: '', icon: ''}) {
+  createMarker(mark = { position: {}, title: '', icon: '', ani: ''}) {
     const self = this,
           marker = { map:self.map }
 
     mark.position ? marker.position = mark.position : mark.position;
     mark.title ? marker.title = mark.title : mark.position;
     mark.icon ? marker.icon = mark.icon : mark.icon;
-    marker.animation = google.maps.Animation.DROP
+    mark.ani ? marker.animation = mark.ani : marker.animation = google.maps.Animation.DROP;
 
     return new google.maps.Marker(marker);
   }
@@ -688,7 +690,7 @@ function FynViewModel() {
 
 // Model Data Storage Section
 // 
-  self.Gmap = new G_Model()
+  self.G = new G_Model()
 
   self.title = ko.observable(`FYN - Find your Neighborhood`);
   self.activeInterface = ko.observable();
@@ -749,16 +751,18 @@ function FynViewModel() {
   //Control Home Interface view
 
   //Searching for homes
+  self.homeSavedItems = ko.observableArray([]);
+  self.homeActiveItems = ko.observableArray([]);
+  self.homeItem = function(home = { position: {}, title: '', icon: '', ani: ''}) {
+
+  }
+
+
   self.hSearch = {
     name: ko.observable(''),
     search: ko.observable(''),
-    hArray: new Array(),
-    savedArray: [],
-/*    hasSearch: ko.computed(function() {
-      return self.hSearch.hArray.length > 0 ? false : true;
-    }),*/
     searchMark: function() {
-      self.Gmap.findPlace({
+      self.G.findPlace({
         query:`${self.hSearch.search()}`,
         fields: ['formatted_address','name','geometry']
       }, self.hSearch.addMark);
@@ -766,9 +770,14 @@ function FynViewModel() {
 
     addMark: function(results, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
-        self.Gmap.createMarker({ position: results[0].geometry.location, title: self.hSearch.name() });
+          for (const result of results) {
+            self.G.createMarker({
+                position: result.geometry.location,
+                title: 'Testing Title'
+            })
+          }
       } else {
-        console.log(`${results} \n ${status}`);
+        // console.log(`${results} \n ${status}`);
         self.error(status);
       }
     }
@@ -777,7 +786,7 @@ function FynViewModel() {
   self.lasthSearch = null;
 
   self.searchMarker = function () {
-    self.Gmap.findPlace({
+    self.G.findPlace({
       query:`${self.hSearch.search()}`,
       fields: ['formatted_address','name','geometry']
     }, self.addMarker)
@@ -785,9 +794,9 @@ function FynViewModel() {
 
   self.addMarker = function (results,status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
-      self.Gmap.createMarker({ position: results[0].geometry.location, title: self.hSearch.name() });
+      self.G.createMarker({ position: results[0].geometry.location, title: self.hSearch.name() });
     } else {
-      console.log(`${results} \n ${status}`)
+    //   console.log(`${results} \n ${status}`)
       self.error(status);
     }
   }
@@ -795,13 +804,14 @@ function FynViewModel() {
   //
   //
   self.initApp = function() {
-    const G = self.Gmap
+    const G = self.G
     G.map = new google.maps.Map(G.mapEl, {
       center: G.testMarker,
       zoom: 11,
       styles: G.mStyles[0],
       disableDefaultUI:true
     });
+    gMap = G.map;
 
 
 //  Original test marker
@@ -814,7 +824,7 @@ function FynViewModel() {
 
   }
 
-  self.Gmap.loadMap(self.Gmap.API).then(self.initApp)
+  self.G.loadMap(self.G.API).then(self.initApp)
   .catch(function(response){
     alert(`Looks like the first URL failed. Time to slowly walk away.\n${response}`);
   })
