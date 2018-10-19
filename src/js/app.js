@@ -628,16 +628,6 @@ class G_Model {
     //Marker Settings
     //
 
-    //Interface Properties
-    //
-    this.home = {
-      searchMarker: null,
-      markers: []
-    }
-    this.places = {
-      searchMarker: null,
-      markers: []
-    }
   }
 
   // get(libraries){
@@ -645,36 +635,36 @@ class G_Model {
   // }
 
   //Asychronously Load Map scripts
-  loadMap(API) {
-    const gMaps = `https://maps.googleapis.com/maps/api/js`,
-      arrayLibraries = [`places`,`geometry`];
+    loadMap(API) {
+        const gMaps = `https://maps.googleapis.com/maps/api/js`,
+            arrayLibraries = [`places`,`geometry`];
 
-    return new Promise(function(resolve, reject){
-      let script = document.createElement('script');
-      script.src = `${gMaps}?libraries=${arrayLibraries.join()}&key=${API}`;
-      script.onload = () => resolve();
-      script.onerror = () => reject(script.src);
+        return new Promise(function(resolve, reject){
+            let script = document.createElement('script');
+            script.src = `${gMaps}?libraries=${arrayLibraries.join()}&key=${API}`;
+            script.onload = () => resolve();
+            script.onerror = () => reject(script.src);
 
-      document.head.appendChild(script);
-    })
-  }
+            document.head.appendChild(script);
+        })
+    }
 
-  createMarker(mark = { position: {}, title: '', icon: '', ani: ''}) {
-    const self = this,
-          marker = { map:self.map }
+    createMarker(mark = { position: {}, title: '', icon: '', ani: ''}) {
+        const self = this,
+            marker = { map:self.map };
 
-    mark.position ? marker.position = mark.position : mark.position;
-    mark.title ? marker.title = mark.title : mark.position;
-    mark.icon ? marker.icon = mark.icon : mark.icon;
-    mark.ani ? marker.animation = mark.ani : marker.animation = google.maps.Animation.DROP;
+        mark.position ? marker.position = mark.position : mark.position;
+        mark.title ? marker.title = mark.title : mark.position;
+        mark.icon ? marker.icon = mark.icon : mark.icon;
+        mark.ani ? marker.animation = mark.ani : marker.animation = google.maps.Animation.DROP;
 
-    return new google.maps.Marker(marker);
-  }
+        return new google.maps.Marker(marker);
+    }
 
-  findPlace(request,callback) {
-    const self = this;
-    new google.maps.places.PlacesService(self.map).findPlaceFromQuery(request,callback)
-  }
+    findPlace(request,callback) {
+        const self = this;
+        return new google.maps.places.PlacesService(self.map).findPlaceFromQuery(request,callback)
+    }
 
 
 }
@@ -686,15 +676,15 @@ class G_Model {
 //
 
 function FynViewModel() {
-  const self = this;
+    const self = this;
 
 // Model Data Storage Section
 // 
-  self.G = new G_Model()
+    self.G = new G_Model()
 
-  self.title = ko.observable(`FYN - Find your Neighborhood`);
-  self.activeInterface = ko.observable();
-  self.error = ko.observable(false);
+    self.title = ko.observable(`FYN - Find your Neighborhood`);
+    self.activeInterface = ko.observable();
+    self.error = ko.observable(false);
 
 //
 //
@@ -741,80 +731,84 @@ function FynViewModel() {
 // for INTERFACE
 //
 //
-  self.intViewClass = ko.observable(false);
+    self.intViewClass = ko.observable(false);
 
-  // === HOMES ===
-  // Data & Controls
-  //
-  //
+    // === HOMES ===
+    // Data & Controls
+    //
+    //
 
-  //Control Home Interface view
+    //Control Home Interface view
 
-  //Searching for homes
-  self.homeSavedItems = ko.observableArray([]);
-  self.homeActiveItems = ko.observableArray([]);
-  self.homeItem = function(home = { position: {}, title: '', icon: '', ani: ''}) {
+    //Searching for homes
+    self.homeSavedItems = ko.observableArray([]);
+    self.homeActiveItems = ko.observableArray([]);
+    self.homeItem = function(home = { position: {}, title: '', icon: '/images/home-point.png', iconHover: '/images/home-active.png', ani: '' }, marker) {
+        this.position = home.position;
+        this.title = home.title;
+        this.icon = home.icon;
+        this.iconHover = home.iconHover;
+    }
 
-  }
 
+    self.hSearch = {
+        name: ko.observable(''),
+        search: ko.observable(''),
+        searchMark: function() {
+            self.G.findPlace({
+            query:`${self.hSearch.search()}`,
+            fields: ['formatted_address','name','geometry']
+            }, self.hSearch.addMark);
+        },
 
-  self.hSearch = {
-    name: ko.observable(''),
-    search: ko.observable(''),
-    searchMark: function() {
-      self.G.findPlace({
+        addMark: function(results, status) {
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                for (const result of results) {
+
+                self.G.createMarker({
+                    position: result.geometry.location,
+                    title: 'Testing Title'
+                })
+                }
+            } else {
+            // console.log(`${results} \n ${status}`);
+            self.error(status);
+            }
+        }
+    }
+
+    self.lasthSearch = null;
+
+    self.searchMarker = function () {
+    self.G.findPlace({
         query:`${self.hSearch.search()}`,
         fields: ['formatted_address','name','geometry']
-      }, self.hSearch.addMark);
-    },
-
-    addMark: function(results, status) {
-      if (status == google.maps.places.PlacesServiceStatus.OK) {
-          for (const result of results) {
-            self.G.createMarker({
-                position: result.geometry.location,
-                title: 'Testing Title'
-            })
-          }
-      } else {
-        // console.log(`${results} \n ${status}`);
-        self.error(status);
-      }
+    }, self.addMarkers)
     }
-  }
 
-  self.lasthSearch = null;
-
-  self.searchMarker = function () {
-    self.G.findPlace({
-      query:`${self.hSearch.search()}`,
-      fields: ['formatted_address','name','geometry']
-    }, self.addMarker)
-  }
-
-  self.addMarker = function (results,status) {
-    if (status == google.maps.places.PlacesServiceStatus.OK) {
-      self.G.createMarker({ position: results[0].geometry.location, title: self.hSearch.name() });
-    } else {
-    //   console.log(`${results} \n ${status}`)
-      self.error(status);
+    self.addMarkers = function (results,status) {
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+            self.G.createMarker({ position: results[0].geometry.location, title: self.hSearch.name() });
+        } else {
+        //   console.log(`${results} \n ${status}`)
+            self.error(status);
+        }
     }
-  }
-  // App Initialization
-  //
-  //
-  self.initApp = function() {
+    // App Initialization
+    //
+    //
+    self.initApp = function() {
     const G = self.G
     G.map = new google.maps.Map(G.mapEl, {
-      center: G.testMarker,
-      zoom: 11,
-      styles: G.mStyles[0],
-      disableDefaultUI:true
+        center: G.testMarker,
+        zoom: 11,
+        styles: G.mStyles[0],
+        disableDefaultUI:true
     });
     gMap = G.map;
 
 
-//  Original test marker
+    //  Original test marker
     // G.home.markers.push(new google.maps.Marker({
     //   position: G.testMarker,
     //   map: G.map,
@@ -822,7 +816,7 @@ function FynViewModel() {
     //   animation:google.maps.Animation.DROP
     // }))
 
-  }
+    }
 
   self.G.loadMap(self.G.API).then(self.initApp)
   .catch(function(response){

@@ -2,96 +2,97 @@
 <html lang="en">
 
 <head>
-	<!-- Required meta tags always come first -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <link rel="icon" href="/images/fyn-icon.png" type="image/png">
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-	<!-- Other tags -->
+    <link rel="icon" href="/images/fyn-icon.png" type="image/png">
 
-	<!-- Open graph tags -->
+    <!-- Other tags -->
 
-	<!-- CSS -->
-	<link rel="stylesheet" href="./../test/css/inline-style.css" inline>
+    <!-- Open graph tags -->
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./../test/css/inline-style.css" inline>
 
 </head>
 
 <body>
-	<div class="container-fluid h-100">
-    <div class="row h-100">
-			<div id="map" class="col order-lg-2">
-				<h3 class="loading">Map Loading<span class="dotOne">&nbsp;.</span><span class="dotTwo">.</span><span class="dotThree">.</span></h3>
-				<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-			</div>
-			<div id="interface" class="col-lg-3 order-lg-1">
-				<nav id="menu" data-bind="">
-						<ul class="menuWrap" data-bind="template: { name: 'Menu', foreach: menuItems, as: 'item' }">
-						</ul>
+    <div class="container-fluid h-100">
+        <div class="row h-100">
+            <div id="map" class="col order-lg-2">
+                <h3 class="loading">Map Loading<span class="dotOne">&nbsp;.</span><span class="dotTwo">.</span><span class="dotThree">.</span></h3>
+                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            </div>
+            <div id="interface" class="col-lg-3 order-lg-1">
+                <nav id="menu" data-bind="">
+                    <ul class="menuWrap" data-bind="template: { name: 'Menu', foreach: menuItems, as: 'item' }">
+                    </ul>
 
-				</nav>
-				<div id="iView" data-bind="template: { name: activeMenu }, css: { active: intViewClass() == true }, activeMenu">
-				</div>
+                </nav>
+                <div id="iView" data-bind="template: { name: activeMenu }, css: { active: intViewClass() == true }, activeMenu">
+                </div>
 
-			</div>
-		</div>
-  </div>
-  <div id="welcome">
-    <div class="logo-Wrapper"><img src="images/fyn-logo-color.gif" alt="FYN color logo" class="logo"></div>
-  </div>
-
-	<!-- KNOCKOUT HTML Templates -->
-
-	<!-- Menu template -->
-	<script type="text/html" id="Menu">
-			<li class="menuItem" data-bind="css: { active: item.active() == true }, click: $root.menuRemoveActive ">
-				<img data-bind="attr: { src: item.icon, alt: item.alt, title: item.name }">
-				<p class="title" data-bind="text: item.name"></p>
-			</li>
-		</ul>
-	</script>
-
-	<!-- Search for home template -->
-	<script type="text/html" id="start">
-	</script>
-
-	<!-- Homes interface template -->
-	<script type="text/html" id="Homes">
-		<div class="submenu homes">
-			<div class="submenu-item" data-bind="">
-				<h3>ADD PLACE</h3>
-			</div>
-			<div class="submenu-item" data-bind="">
-				<h3>SHOW LIST</h3>
-			</div>
-		</div>
-		<div class="iWrap">
-		<h2 class="homes title">Find a Place</h2>
-		<form>
-		<input data-bind="textInput: hSearch.search " type="text" placeholder="Place / Address search" name="" id="h-name" class="search">
-		<button class="find" data-bind="click: hSearch.searchMark">FIND IT</button>
-		<button class="clear" data-bind="">CLEAR SEARCH</button>
-		</form>
+            </div>
+        </div>
     </div>
-    <div class="Results" data-bind="template: { name: 'homeSearch', foreach: homeItems, as: 'item' }"
-	</script>
+    <div id="welcome">
+        <div class="logo-Wrapper">
+            <img src="images/fyn-logo-color.gif" alt="FYN color logo" class="logo">
+        </div>
+    </div>
 
-	<script type="text/html" id="homeSearch">
-		
-	</script>
-	<!-- Places interface template -->
-	<script type="text/html" id="Places">
-	</script>
+<!-- KNOCKOUT HTML Templates -->
+
+<!-- Menu template -->
+<script type="text/html" id="Menu">
+    <li class="menuItem" data-bind="css: { active: item.active() == true }, click: $root.menuRemoveActive ">
+        <img data-bind="attr: { src: item.icon, alt: item.alt, title: item.name }">
+        <p class="title" data-bind="text: item.name"></p>
+    </li>
+</script>
+
+<!-- Search for home template -->
+<script type="text/html" id="start">
+</script>
+
+<!-- Homes interface template -->
+<script type="text/html" id="Homes">
+    <div class="submenu homes">
+        <div class="submenu-item" data-bind="">
+            <h3>ADD PLACE</h3>
+        </div>
+        <div class="submenu-item" data-bind="">
+            <h3>SHOW LIST</h3>
+        </div>
+    </div>
+    <div class="iWrap">
+        <h2 class="homes title">Find a Place</h2>
+        <form>
+            <input data-bind="textInput: hSearch.search " type="text" placeholder="Place / Address search" name="" id="h-name" class="search">
+            <button class="find" data-bind="click: hSearch.searchMark">FIND IT</button>
+            <button class="clear" data-bind="">CLEAR SEARCH</button>
+        </form>
+    </div>
+    <div class="Results" data-bind="template: { name: 'homeSearch', foreach: homeActiveItems, as: 'item' }"></div>
+</script>
+
+<script type="text/html" id="homeSearch">
+
+</script>
+<!-- Places interface template -->
+<script type="text/html" id="Places">
+</script>
 
 
-	<!-- Filter Interface template -->
-	<script type="text/html" id="Filters">
-	</script>
+<!-- Filter Interface template -->
+<script type="text/html" id="Filters">
+</script>
 
-	<!-- Settings Interface Template -->
-	<script type="text/html" id="Settings">
-	</script>
+<!-- Settings Interface Template -->
+<script type="text/html" id="Settings">
+</script>
 
 	<!-- Defferred CSS Styles -->
 	<noscript id="deferred-styles">
