@@ -663,7 +663,7 @@ class G_Model {
 
     findPlace(request,callback) {
         const self = this;
-        return new google.maps.places.PlacesService(self.map).findPlaceFromQuery(request,callback)
+        return new google.maps.places.PlacesService(self.map).textSearch(request,callback)
     }
 
 
@@ -743,13 +743,32 @@ function FynViewModel() {
     //Searching for homes
     self.homeSavedItems = ko.observableArray([]);
     self.homeActiveItems = ko.observableArray([]);
-    self.homeItem = function(home = { position: {}, title: '', icon: '/images/home-point.png', iconHover: '/images/home-active.png', ani: '' }, marker) {
+    self.homeItem = function(home = { position: {}, title: '', icon: '/images/home-point.png', iconHover: '/images/home-active.png', ani: google.maps.Animation.DROP }) {
         this.position = home.position;
         this.title = home.title;
+        home.icon = {
+            url: 'images/home-point.png',
+            size: new google.maps.Size(35,45),
+            origin: new google.maps.Point(0,0),
+            anchor: new google.maps.Point(0,46)
+        };
         this.icon = home.icon;
         this.iconHover = home.iconHover;
+
+        this.marker = self.G.createMarker(home);
+
+        // this.marker.addListener('hover', )
+
+
     }
 
+    self.saveHome = function(seat) { self.homeSavedItems.push(seat)}
+    self.clearSearch = function() {
+        for (const home of self.homeActiveItems()) {
+            home.marker.setMap(null);
+        }
+        self.homeActiveItems.removeAll();
+    }
 
     self.hSearch = {
         name: ko.observable(''),
@@ -757,18 +776,22 @@ function FynViewModel() {
         searchMark: function() {
             self.G.findPlace({
             query:`${self.hSearch.search()}`,
-            fields: ['formatted_address','name','geometry']
+            fields: ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry']
             }, self.hSearch.addMark);
         },
 
         addMark: function(results, status) {
             if (status == google.maps.places.PlacesServiceStatus.OK) {
+                console.log(results);
                 for (const result of results) {
-
-                self.G.createMarker({
-                    position: result.geometry.location,
-                    title: 'Testing Title'
-                })
+                    self.homeActiveItems.push(new self.homeItem({
+                        position: result.geometry.location,
+                        title: result.name
+                    }));
+                // self.G.createMarker({
+                //     position: result.geometry.location,
+                //     title: 'Testing Title'
+                // })
                 }
             } else {
             // console.log(`${results} \n ${status}`);
