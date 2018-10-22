@@ -750,7 +750,7 @@ function FynViewModel() {
             url: 'images/home-point.png',
             size: new google.maps.Size(35,45),
             origin: new google.maps.Point(0,0),
-            anchor: new google.maps.Point(0,46)
+            anchor: new google.maps.Point(0,45)
         };
         this.icon = home.icon;
         this.iconHover = home.iconHover;

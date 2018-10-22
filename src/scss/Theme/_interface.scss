@@ -1,43 +1,77 @@
-
+@keyframes viewScroll {
+    0% { height: 0; }
+    100% { height: 200px} 
+}
 
 h1,h2,h3,h4,h5,p {
-  color:$white;
+    color:$white;
 }
 
 h1 { font-size:2em; }
 h2 { font-size: 1.5em; }
 
 #interface {
-  height: 60px;
-  overflow: visible;
-  background-color: $activeT-c1;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
+    height: 60px;
+    overflow: visible;
+    background-color: $activeT-c1;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
 
-  &.right {
-    order:3;
-  }
-
-  #iView {
-    height: 0;
-    position: absolute;
-    bottom: 100%;
-
-    &.active{
-      height: auto;
-      transition: height 0.2s ease-out;
+    &.right {
+        order:3;
     }
-  }
+
+    #iView {
+        height: 0;
+        position: absolute;
+
+        bottom: 100%;
+        display: flex;
+        flex-direction: column;
+
+        &.active{
+            height: auto;
+            transition: height 0.2s ease-out;
+        }
+
+        .submenu {
+            background-color: $submenu-bgColor;
+        
+            &.homes {
+            display: flex;
+            border-top: $submenu-border;
+
+            .submenu-item {
+                border-right: $submenu-border;
+                cursor: pointer;
+                width: 50%;
+
+                &:last-child {
+                    border-right: none;
+                }
+            }
+
+            @media screen and (min-width: 992px) {
+                border-bottom: $submenu-border;
+                border-top: none;
+            }
+        }
+        }
+
+        .iWrap {
+            padding: 10px;
+        }
+    }
 }
 
 @media screen and (min-width:992px){
-  #interface {
-    max-width:400px;
-    height:auto;
+    #interface {
+        max-width:400px;
+        height:auto;
 
-    #iView {
-      position: static;
+        #iView {
+            position: static;
+        }
     }
-  }
 }
