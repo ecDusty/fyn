@@ -661,7 +661,7 @@ class G_Model {
         return new google.maps.Marker(marker);
     }
 
-    findPlace(request,callback) {
+    textFindPlace(request,callback) {
         const self = this;
         return new google.maps.places.PlacesService(self.map).textSearch(request,callback)
     }
@@ -732,49 +732,81 @@ function FynViewModel() {
 //
 //
     self.intViewClass = ko.observable(false);
+    self.searchBounds = ko.observable('Hong Kong');
+    self.User = {};
+    self.User.location = {
+        lat: null,
+        lng: null
+    }
+
+    self.getUserLocation = function() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(self.geoSetUserLocation)
+        } else {
+            console.log('Geolocation is not supported by this browser');
+        }
+    }
+    self.geoSetUserLocation = function(position) {
+        self.User.location.lat = position.coords.latitude;
+        self.User.location.lat = position.coords.lattitude;
+    }
+
+    self.googleSetUserLocation = function(position) {
+        self.User.location.lat = position.geometry.location.lat();
+        self.User.location.lng = position.geometry.location.lng();
+    }
 
     // === HOMES ===
     // Data & Controls
     //
     //
-
+    self.clearSearch = function (koArray) {
+        for (const item of koArray()) { item.marker.setMap(null); }
+        koArray.removeAll();
+    }
     //Control Home Interface view
 
     //Searching for homes
     self.homeSavedItems = ko.observableArray([]);
     self.homeActiveItems = ko.observableArray([]);
-    self.homeItem = function(home = { position: {}, title: '', icon: '/images/home-point.png', iconHover: '/images/home-active.png', ani: google.maps.Animation.DROP }) {
+    self.homeItem = function(home = { position: {}, title: '', icon: '/images/home-point.png', iconActiveHover: '/images/home-active.png', ani: google.maps.Animation.DROP }) {
+        const foo = this;
         this.position = home.position;
         this.title = home.title;
-        home.icon = {
-            url: 'images/home-point.png',
+        this.defIcon = home.icon;
+        this.iconActiveHover = home.iconActiveHover;
+        this.icon = {
+            url: home.icon,
             size: new google.maps.Size(35,45),
             origin: new google.maps.Point(0,0),
             anchor: new google.maps.Point(0,45)
         };
-        this.icon = home.icon;
-        this.iconHover = home.iconHover;
+
+        home.icon = this.icon;
 
         this.marker = self.G.createMarker(home);
 
-        // this.marker.addListener('hover', )
+        this.marker.addListener('mouseover',function() {
+            this.setIcon(foo.iconActiveHover);
+        })
+        this.marker.addListener('mouseout',function() {
+            this.setIcon(foo.icon.url);
+        })
 
 
     }
 
-    self.saveHome = function(seat) { self.homeSavedItems.push(seat)}
-    self.clearSearch = function() {
-        for (const home of self.homeActiveItems()) {
-            home.marker.setMap(null);
-        }
-        self.homeActiveItems.removeAll();
+    self.saveHome = function(home) { 
+        home.icon.url = '/images/home-saved.png';
+        self.homeSavedItems.push(home);
+
     }
 
     self.hSearch = {
         name: ko.observable(''),
         search: ko.observable(''),
         searchMark: function() {
-            self.G.findPlace({
+            self.G.textFindPlace({
             query:`${self.hSearch.search()}`,
             fields: ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry']
             }, self.hSearch.addMark);
@@ -783,21 +815,23 @@ function FynViewModel() {
         addMark: function(results, status) {
             if (status == google.maps.places.PlacesServiceStatus.OK) {
                 console.log(results);
+                let x = 0
                 for (const result of results) {
-                    self.homeActiveItems.push(new self.homeItem({
-                        position: result.geometry.location,
-                        title: result.name
-                    }));
-                // self.G.createMarker({
-                //     position: result.geometry.location,
-                //     title: 'Testing Title'
-                // })
+                    setTimeout(function() {
+                        self.homeActiveItems.push(new self.homeItem({
+                            position: result.geometry.location,
+                            title: result.name
+                        }));
+                    },200*x);
+                    x++
                 }
             } else {
-            // console.log(`${results} \n ${status}`);
-            self.error(status);
+                // console.log(`${results} \n ${status}`);
+                self.error(status);
             }
-        }
+        },
+        clearSearch: () => self.clearSearch(self.homeActiveItems)
+
     }
 
     self.lasthSearch = null;
@@ -821,23 +855,23 @@ function FynViewModel() {
     //
     //
     self.initApp = function() {
-    const G = self.G
-    G.map = new google.maps.Map(G.mapEl, {
-        center: G.testMarker,
-        zoom: 11,
-        styles: G.mStyles[0],
-        disableDefaultUI:true
-    });
-    gMap = G.map;
+        const G = self.G
+        G.map = new google.maps.Map(G.mapEl, {
+            center: G.testMarker,
+            zoom: 11,
+            styles: G.mStyles[0],
+            disableDefaultUI:true
+        });
+        gMap = G.map;
 
 
-    //  Original test marker
-    // G.home.markers.push(new google.maps.Marker({
-    //   position: G.testMarker,
-    //   map: G.map,
-    //   title: 'First marker YAY!',
-    //   animation:google.maps.Animation.DROP
-    // }))
+        //  Original test marker
+        // G.home.markers.push(new google.maps.Marker({
+        //   position: G.testMarker,
+        //   map: G.map,
+        //   title: 'First marker YAY!',
+        //   animation:google.maps.Animation.DROP
+        // }))
 
     }
 

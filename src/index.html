@@ -72,7 +72,7 @@
         <form>
             <input data-bind="textInput: hSearch.search " type="text" placeholder="Place / Address search" name="" id="h-name" class="search">
             <button class="find" data-bind="click: hSearch.searchMark">FIND IT</button>
-            <button class="clear" data-bind="clearSearch">CLEAR SEARCH</button>
+            <button class="clear" data-bind="click: hSearch.clearSearch">CLEAR SEARCH</button>
         </form>
     </div>
     <div class="Results" data-bind="template: { name: 'homeSearch', foreach: homeActiveItems, as: 'item' }"></div>

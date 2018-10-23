@@ -18,5 +18,10 @@ $activeT-c3: $theme1-c3;
 $activeT-c4: $theme1-c4;
 $activeT-c5: $theme1-c5;
 
-$submenu-border: 1px solid #fff;
+$interface-bg: rgba(19, 172, 189, 0.8);
+
+$menu-border: 1px solid $activeT-c4;
+$menu-bg: $activeT-c1;
+
+$submenu-border: $menu-border;
 $submenu-bgColor: #446364;
