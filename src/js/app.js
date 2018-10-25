@@ -681,6 +681,7 @@ function FynViewModel() {
 // Model Data Storage Section
 // 
     self.G = new G_Model()
+    self.intView = ko.observable(false);
 
     self.title = ko.observable(`FYN - Find your Neighborhood`);
     self.activeInterface = ko.observable();
@@ -705,11 +706,11 @@ function FynViewModel() {
     if (item.active()) {
       item.active(false);
       self.activeMenu('start');
-      self.intViewClass(false);
+      self.intView(false);
     } else {
       for (const menu of self.menuItems) { menu.active(false); }
       item.active(true);
-      self.intViewClass(true);
+      self.intView(true);
       self.activeMenu(item.name);
     }
   }
@@ -731,7 +732,11 @@ function FynViewModel() {
 // for INTERFACE
 //
 //
-    self.intViewClass = ko.observable(false);
+    self.intViewClass = ko.pureComputed({
+        read: function() {
+            return self.activeMenu() + ' ' + (self.intView() ? 'active' : '');
+        }
+    });
     self.searchBounds = ko.observable('Hong Kong');
     self.User = {};
     self.User.location = {
@@ -773,24 +778,26 @@ function FynViewModel() {
         const foo = this;
         this.position = home.position;
         this.title = home.title;
-        this.defIcon = home.icon;
-        this.iconActiveHover = home.iconActiveHover;
-        this.icon = {
-            url: home.icon,
+        this.defIcon = '/images/home-point.png';
+        this.iconActiveHover = '/images/home-active.png';
+        home.icon = {
+            url: foo.defIcon,
             size: new google.maps.Size(35,45),
             origin: new google.maps.Point(0,0),
             anchor: new google.maps.Point(0,45)
         };
 
-        home.icon = this.icon;
+        this.icon = home.icon;
 
         this.marker = self.G.createMarker(home);
 
         this.marker.addListener('mouseover',function() {
-            this.setIcon(foo.iconActiveHover);
+            foo.icon.url = foo.iconActiveHover;
+            this.setIcon(foo.icon);
         })
         this.marker.addListener('mouseout',function() {
-            this.setIcon(foo.icon.url);
+            foo.icon.url = foo.defIcon;
+            this.setIcon(foo.icon);
         })
 
 
