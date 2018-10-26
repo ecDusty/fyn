@@ -73,7 +73,7 @@
 
 <script type="text/html" id="add-place">
     <div class="hSearch">
-        <h2 class="homes title">Find a Place</h2>
+        <h2 class="homes title">Find a place</h2>
         <form>
             <input data-bind="textInput: hSearch.search " type="text" placeholder="Place / Address search" name="" id="h-name" class="search">
             <button class="find" data-bind="click: hSearch.searchMark">FIND IT</button>
@@ -84,7 +84,7 @@
 </script>
 
 <script type="text/html" id="show-list">
-    <h2 class="title">Saved Places</h2>
+    <h2 class="title">Saved places</h2>
     <div class="Results" data-bind="template: { name: 'homeSearch', foreach: homeSavedItems, as: 'item' }"></div>
 </script>
 
@@ -105,6 +105,15 @@
 
 <!-- Places interface template -->
 <script type="text/html" id="Places">
+    <div class="hSearch">
+        <h2 class="homes title">Find your favorite places</h2>
+        <form>
+            <input data-bind="textInput: hSearch.search " type="text" placeholder="Place / Address search" name="" id="h-name" class="search">
+            <button class="find" data-bind="click: hSearch.searchMark">FIND IT</button>
+            <button class="clear" data-bind="click: hSearch.clearSearch">CLEAR SEARCH</button>
+        </form>
+    </div>
+    <div class="Results" data-bind="template: { name: 'homeSearch', foreach: homeActiveItems, as: 'item' }"></div>
 </script>
 
 
