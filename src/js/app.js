@@ -625,10 +625,33 @@ class G_Model {
     this.mapEl = mapElement;
     this.libraries = ['places','geometry'];
 
+    this.Places = null;
+
     //Marker Settings
     //
 
   }
+
+createMarker(mark = { position: {}, title: '', icon: '', ani: ''}) {
+    const marker = { map: null };
+
+    mark.position ? marker.position = mark.position : mark.position;
+    mark.title ? marker.title = mark.title : mark.position;
+    mark.icon ? marker.icon = mark.icon : mark.icon;
+    mark.ani ? marker.animation = mark.ani : marker.animation = google.maps.Animation.DROP;
+
+    return new google.maps.Marker(marker);
+}
+
+textFindPlace(request,callback) {
+    const self = this;
+    if (self.Places == null) {
+        self.Places = new google.maps.places.PlacesService(self.map)
+        return self.Places.textSearch(request,callback)
+    } else {
+        return self.Places.textSearch(request,callback);
+    }
+}
 
   // get(libraries){
   //   fetch(`https`)
@@ -647,23 +670,6 @@ class G_Model {
 
             document.head.appendChild(script);
         })
-    }
-
-    createMarker(mark = { position: {}, title: '', icon: '', ani: ''}) {
-        const self = this,
-            marker = { map:self.map };
-
-        mark.position ? marker.position = mark.position : mark.position;
-        mark.title ? marker.title = mark.title : mark.position;
-        mark.icon ? marker.icon = mark.icon : mark.icon;
-        mark.ani ? marker.animation = mark.ani : marker.animation = google.maps.Animation.DROP;
-
-        return new google.maps.Marker(marker);
-    }
-
-    textFindPlace(request,callback) {
-        const self = this;
-        return new google.maps.places.PlacesService(self.map).textSearch(request,callback)
     }
 
 
@@ -761,22 +767,41 @@ function FynViewModel() {
         self.User.location.lng = position.geometry.location.lng();
     }
 
+    self.clearMarkers = function(koArray) {
+        for (const item of koArray()) { 
+            item.marker.setMap(null); 
+        }
+        koArray.removeAll();
+    }
+
+    self.hideMarkers = function(koArray) {
+        for (const item of koArray()) { 
+            item.marker.setMap(null); 
+        }
+    }
+
+    self.showMarkers = function(koArray) {
+        for (const item of koArray()) { 
+            item.marker.setMap(self.G.map); 
+        }
+    }
+
     // === HOMES ===
     // Data & Controls
     //
     //
-    self.clearSearch = function (koArray) {
-        for (const item of koArray()) { item.marker.setMap(null); }
-        koArray.removeAll();
-    }
     //Control Home Interface view
 
     //Searching for homes
     self.homeSavedItems = ko.observableArray([]);
     self.homeActiveItems = ko.observableArray([]);
-    self.homeItem = function(home = { position: {}, title: '', icon: '/images/home-point.png', iconActiveHover: '/images/home-active.png', ani: google.maps.Animation.DROP }) {
+
+    self.homeItem = function(home = { position: {}, title: '', icon: '', iconActiveHover: '', search: '', address: '',  ani: google.maps.Animation.DROP }) {
         const foo = this;
+        this.search = home.search;
+        this.saved = ko.observable(false);
         this.position = home.position;
+        this.address = ko.observable(home.address)
         this.title = home.title;
         this.defIcon = '/images/home-point.png';
         this.iconActiveHover = '/images/home-active.png';
@@ -785,7 +810,9 @@ function FynViewModel() {
             size: new google.maps.Size(35,45),
             origin: new google.maps.Point(0,0),
             anchor: new google.maps.Point(0,45)
-        };
+        }
+
+        this.activeIcon = ko.observable(foo.defIcon);
 
         this.icon = home.icon;
 
@@ -793,26 +820,83 @@ function FynViewModel() {
 
         this.marker.addListener('mouseover',function() {
             foo.icon.url = foo.iconActiveHover;
+            foo.activeIcon(foo.icon.url);
             this.setIcon(foo.icon);
-        })
+        });
+
         this.marker.addListener('mouseout',function() {
             foo.icon.url = foo.defIcon;
+            foo.activeIcon(foo.icon.url);
             this.setIcon(foo.icon);
-        })
+        });
 
+        this.setHome = function() {
+            if (foo.saved()) {
+                foo.defIcon = '/images/home-point.png';
+                self.homeSavedItems.remove(foo);
+                self.hSearch.subMenu() == 'show-list' ? foo.marker.setMap(null) : foo.marker;
+            } else {
+                foo.defIcon = '/images/home-saved.png';
+                self.homeSavedItems.push(foo);
+            }
 
-    }
+            foo.activeIcon(foo.defIcon);
+            foo.saved(!foo.saved());
+            foo.icon.url = foo.icon.url == foo.activeIcon ? foo.icon.url : foo.defIcon;
+            foo.marker.setIcon(foo.icon);
+        }
 
-    self.saveHome = function(home) { 
-        home.icon.url = '/images/home-saved.png';
-        self.homeSavedItems.push(home);
+        // this.saveHome = function() {
+        //     foo.defIcon = '/images/home-saved.png';
+        //     foo.activeIcon(foo.defIcon);
+        //     if (!foo.saved()) {
+        //         foo.icon.url = '/images/home-saved.png';
+        //         foo.marker.setIcon(foo.icon);
+        //     }
+        //     foo.saved(true);
+        //     self.homeSavedItems.push(foo);
+        // }
+
+        // this.removeHome = function() {
+        //     foo.defIcon = '/images/home-point.png';
+        //     foo.activeIcon(foo.defIcon);
+        //     if (foo.saved()) {
+        //         foo.icon.url = '/images/home-point.png';
+        //         foo.marker.setIcon(foo.icon);
+        //     }
+        //     foo.saved(false);
+        //     if (self.hSearch.subMenu() == 'show-list')
+        //         foo.marker.setMap(null);
+
+        // //     self.homeSavedItems.remove(foo);
+        // // }
+
+        // this.buttonClick = function() {
+        //     foo.saved() ? foo.removeHome() : foo.saveHome();
+        // }
+
 
     }
 
     self.hSearch = {
         name: ko.observable(''),
         search: ko.observable(''),
+        subMenu: ko.observable('add-place'),
+
+        setAdd: function() {
+            self.hideMarkers(self.homeSavedItems);
+            self.showMarkers(self.homeActiveItems);
+            self.hSearch.subMenu('add-place');
+        },
+
+        setList: function() {
+            self.hideMarkers(self.homeActiveItems);
+            self.showMarkers(self.homeSavedItems);
+            self.hSearch.subMenu('show-list');
+        },
+
         searchMark: function() {
+            self.hSearch.clearSearch();
             self.G.textFindPlace({
             query:`${self.hSearch.search()}`,
             fields: ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry']
@@ -825,11 +909,18 @@ function FynViewModel() {
                 let x = 0
                 for (const result of results) {
                     setTimeout(function() {
-                        self.homeActiveItems.push(new self.homeItem({
+                        const item = new self.homeItem({
                             position: result.geometry.location,
-                            title: result.name
-                        }));
-                    },200*x);
+                            title: result.name,
+                            address: result.formatted_address,
+                            search: self.hSearch.search()
+                        });
+                        if (self.hSearch.subMenu() == 'add-place')
+                            item.marker.setMap(self.G.map)
+                        else
+                            item.marker.setMap(null);
+                        self.homeActiveItems.push(item);
+                    },150*x);
                     x++
                 }
             } else {
@@ -837,27 +928,27 @@ function FynViewModel() {
                 self.error(status);
             }
         },
-        clearSearch: () => self.clearSearch(self.homeActiveItems)
 
+        clearSearch: () => self.clearMarkers(self.homeActiveItems)
     }
 
     self.lasthSearch = null;
 
-    self.searchMarker = function () {
-    self.G.findPlace({
-        query:`${self.hSearch.search()}`,
-        fields: ['formatted_address','name','geometry']
-    }, self.addMarkers)
-    }
+    // self.searchMarker = function () {
+    //     self.G.findPlace({
+    //         query:`${self.hSearch.search()}`,
+    //         fields: ['formatted_address','name','geometry']
+    //     }, self.addMarkers)
+    // }
 
-    self.addMarkers = function (results,status) {
-        if (status == google.maps.places.PlacesServiceStatus.OK) {
-            self.G.createMarker({ position: results[0].geometry.location, title: self.hSearch.name() });
-        } else {
-        //   console.log(`${results} \n ${status}`)
-            self.error(status);
-        }
-    }
+    // self.addMarkers = function (results,status) {
+    //     if (status == google.maps.places.PlacesServiceStatus.OK) {
+    //         self.G.createMarker({ position: results[0].geometry.location, title: self.hSearch.name() });
+    //     } else {
+    //     //   console.log(`${results} \n ${status}`)
+    //         self.error(status);
+    //     }
+    // }
     // App Initialization
     //
     //
@@ -887,4 +978,5 @@ function FynViewModel() {
     alert(`Looks like the first URL failed. Time to slowly walk away.\n${response}`);
   })
 }
-ko.applyBindings(new FynViewModel());
+var test = new FynViewModel()
+ko.applyBindings(test);

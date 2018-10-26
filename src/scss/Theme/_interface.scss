@@ -38,7 +38,6 @@ h2 { font-size: 1.5em; }
         overflow: hidden;
         transform: translateY(100%);
 
-
         &.active{
             height: auto;
             animation-duration: 0.4s;
@@ -47,10 +46,15 @@ h2 { font-size: 1.5em; }
             transform: translateY(0);
         }
 
+        .title {
+            margin-top: 5px;
+        }
+
         .submenu {
             background-color: $submenu-bgColor;
             order:2;
             display: flex;
+            height: 42.2px;
 
             .submenu-item {
                 border-right: $submenu-border;
@@ -63,24 +67,94 @@ h2 { font-size: 1.5em; }
                     border-right: none;
                 }
 
+                &.active {}
+
                 h3 {
                     text-align: center;
                     font-size: 0.8em;
                     margin: 0;
                 }
             }
+
+
         }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 5px;
+
+            input {
+                width: 100%;
+                margin-bottom: 10px;
+                padding: 5px;
+                border-radius: 5px;
+                border: none;
+            }
+        }
+
+        button {
+            padding: 5px 15px;
+            border: $button-border;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .find { background: $button-color-pos; }
+
+        .clear { background: $button-color-neg; }
 
         .iWrap {
             padding: 10px;
 
-            form {
-                input {
-                    width: 100%;
-                    margin-bottom: 10px;
-                    padding: 5px;
-                    border-radius: 5px;
-                    border: none;
+            .Results {
+                max-height: 180px;
+                overflow-y: scroll;
+            }
+
+            .searchItem {
+                display: flex;
+                padding: 7px;
+
+                .image {
+                    margin-top: 3px;
+                    width: 20px;
+                }
+
+                .search-details {
+                    flex-grow: 1;
+
+                    h4 {
+                        font-size: 1.3em;
+                        margin: 0;
+                    }
+
+                    .address {
+                        font-size: 0.9em;
+                    }
+                }
+
+                button {
+                    font-size: 0.7em;
+                    float: right;
+
+                    &.save {
+                        background: $button-color-pos;
+    
+                        &::before {
+                            content: 'SAVE'
+                        }
+                    }
+
+                    &.remove {
+                        background: $button-color-neg;
+    
+                        &::before {
+                            content: 'DELETE'
+                        }
+                    }
                 }
             }
         }
@@ -109,7 +183,14 @@ h2 { font-size: 1.5em; }
                 .submenu-item {
                     border-top: none;
                     border-bottom: $submenu-border;
+                }
+            }
 
+            .iWrap {
+    
+                .Results {
+                    max-height: 400px;
+                    overflow-y: scroll;
                 }
             }
         }

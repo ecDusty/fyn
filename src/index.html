@@ -60,14 +60,19 @@
 <!-- Homes interface template -->
 <script type="text/html" id="Homes">
     <div class="submenu homes">
-        <div class="submenu-item" data-bind="">
+        <div class="submenu-item" data-bind="css: { active: hSearch.subMenu() == 'add-place' }, click: hSearch.setAdd">
             <h3>ADD PLACE</h3>
         </div>
-        <div class="submenu-item" data-bind="">
+        <div class="submenu-item" data-bind="css: { active: hSearch.subMenu() == 'show-list' }, click: hSearch.setList">
             <h3>SHOW LIST</h3>
         </div>
     </div>
-    <div class="iWrap">
+    <div class="iWrap" data-bind="template: { name: hSearch.subMenu }, css: {add: hSearch.subMenu() == 'add-place', list: hSearch.subMenu() == 'show-list' }">
+    </div>
+</script>
+
+<script type="text/html" id="add-place">
+    <div class="hSearch">
         <h2 class="homes title">Find a Place</h2>
         <form>
             <input data-bind="textInput: hSearch.search " type="text" placeholder="Place / Address search" name="" id="h-name" class="search">
@@ -78,9 +83,26 @@
     <div class="Results" data-bind="template: { name: 'homeSearch', foreach: homeActiveItems, as: 'item' }"></div>
 </script>
 
-<script type="text/html" id="homeSearch">
-
+<script type="text/html" id="show-list">
+    <h2 class="title">Saved Places</h2>
+    <div class="Results" data-bind="template: { name: 'homeSearch', foreach: homeSavedItems, as: 'item' }"></div>
 </script>
+
+
+<script type="text/html" id="homeSearch">
+    <div class="searchItem">
+        <div class="image" data-bind="">
+            <img data-bind="attr: {src: item.activeIcon}">
+        </div>
+        <div class="search-details">
+            <button class="" data-bind="css: { save: item.saved() == false, remove: item.saved() == true }, click: setHome"></button>
+            <h4 data-bind="text: item.title"></h4>
+            <p class="address" data-bind="text: item.address"></p>
+            <p class="search" data-bind="">Search: <span data-bind="text: item.search"></span></p>
+        </div>
+    </div>
+</script>
+
 <!-- Places interface template -->
 <script type="text/html" id="Places">
 </script>

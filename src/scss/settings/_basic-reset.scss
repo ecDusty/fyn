@@ -1,6 +1,4 @@
-* {
-  box-sizing:border-box;
-}
+* { box-sizing:border-box; }
 
 // General Styles
 html,body {
@@ -8,6 +6,10 @@ html,body {
   height: 100%;
 }
 
-.vh-100 {
-  height: 100vh !important;
+.vh-100 { height: 100vh !important; }
+
+img { width: 100%; }
+
+h1,h2,h3,h4,h5,h6 {
+  margin:0;
 }
