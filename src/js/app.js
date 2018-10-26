@@ -653,24 +653,28 @@ textFindPlace(request,callback) {
     }
 }
 
-  // get(libraries){
-  //   fetch(`https`)
-  // }
+newBounds() {
+    return new google.maps.LatLngBounds();
+}
 
-  //Asychronously Load Map scripts
-    loadMap(API) {
-        const gMaps = `https://maps.googleapis.com/maps/api/js`,
-            arrayLibraries = [`places`,`geometry`];
+// get(libraries){
+//   fetch(`https`)
+// }
 
-        return new Promise(function(resolve, reject){
-            let script = document.createElement('script');
-            script.src = `${gMaps}?libraries=${arrayLibraries.join()}&key=${API}`;
-            script.onload = () => resolve();
-            script.onerror = () => reject(script.src);
+//Asychronously Load Map scripts
+loadMap(API) {
+    const gMaps = `https://maps.googleapis.com/maps/api/js`,
+        arrayLibraries = [`places`,`geometry`];
 
-            document.head.appendChild(script);
-        })
-    }
+    return new Promise(function(resolve, reject){
+        let script = document.createElement('script');
+        script.src = `${gMaps}?libraries=${arrayLibraries.join()}&key=${API}`;
+        script.onload = () => resolve();
+        script.onerror = () => reject(script.src);
+
+        document.head.appendChild(script);
+    })
+}
 
 
 }
@@ -781,9 +785,12 @@ function FynViewModel() {
     }
 
     self.showMarkers = function(koArray) {
+        let bounds = self.G.newBounds();
         for (const item of koArray()) { 
             item.marker.setMap(self.G.map); 
+            bounds.extend(item.position);
         }
+        self.G.map.fitBounds(bounds);
     }
 
     // === HOMES ===
@@ -845,37 +852,6 @@ function FynViewModel() {
             foo.icon.url = foo.icon.url == foo.activeIcon ? foo.icon.url : foo.defIcon;
             foo.marker.setIcon(foo.icon);
         }
-
-        // this.saveHome = function() {
-        //     foo.defIcon = '/images/home-saved.png';
-        //     foo.activeIcon(foo.defIcon);
-        //     if (!foo.saved()) {
-        //         foo.icon.url = '/images/home-saved.png';
-        //         foo.marker.setIcon(foo.icon);
-        //     }
-        //     foo.saved(true);
-        //     self.homeSavedItems.push(foo);
-        // }
-
-        // this.removeHome = function() {
-        //     foo.defIcon = '/images/home-point.png';
-        //     foo.activeIcon(foo.defIcon);
-        //     if (foo.saved()) {
-        //         foo.icon.url = '/images/home-point.png';
-        //         foo.marker.setIcon(foo.icon);
-        //     }
-        //     foo.saved(false);
-        //     if (self.hSearch.subMenu() == 'show-list')
-        //         foo.marker.setMap(null);
-
-        // //     self.homeSavedItems.remove(foo);
-        // // }
-
-        // this.buttonClick = function() {
-        //     foo.saved() ? foo.removeHome() : foo.saveHome();
-        // }
-
-
     }
 
     self.hSearch = {
@@ -907,7 +883,9 @@ function FynViewModel() {
             if (status == google.maps.places.PlacesServiceStatus.OK) {
                 console.log(results);
                 let x = 0
+                let bounds = self.G.newBounds();
                 for (const result of results) {
+                    bounds.extend(result.geometry.location);
                     setTimeout(function() {
                         const item = new self.homeItem({
                             position: result.geometry.location,
@@ -923,6 +901,7 @@ function FynViewModel() {
                     },150*x);
                     x++
                 }
+                self.G.map.fitBounds(bounds);
             } else {
                 // console.log(`${results} \n ${status}`);
                 self.error(status);
@@ -932,23 +911,6 @@ function FynViewModel() {
         clearSearch: () => self.clearMarkers(self.homeActiveItems)
     }
 
-    self.lasthSearch = null;
-
-    // self.searchMarker = function () {
-    //     self.G.findPlace({
-    //         query:`${self.hSearch.search()}`,
-    //         fields: ['formatted_address','name','geometry']
-    //     }, self.addMarkers)
-    // }
-
-    // self.addMarkers = function (results,status) {
-    //     if (status == google.maps.places.PlacesServiceStatus.OK) {
-    //         self.G.createMarker({ position: results[0].geometry.location, title: self.hSearch.name() });
-    //     } else {
-    //     //   console.log(`${results} \n ${status}`)
-    //         self.error(status);
-    //     }
-    // }
     // App Initialization
     //
     //
@@ -961,16 +923,6 @@ function FynViewModel() {
             disableDefaultUI:true
         });
         gMap = G.map;
-
-
-        //  Original test marker
-        // G.home.markers.push(new google.maps.Marker({
-        //   position: G.testMarker,
-        //   map: G.map,
-        //   title: 'First marker YAY!',
-        //   animation:google.maps.Animation.DROP
-        // }))
-
     }
 
   self.G.loadMap(self.G.API).then(self.initApp)
