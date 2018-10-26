@@ -21,7 +21,7 @@ class G_Model {
     // Map Settings
     //
     this.API = API;
-    this.testMarker = {lat: 22.2485, lng:114.1542};
+    this.testMarker = {lat: 22.2485, lng:114.1542}; //Hong Kong
     this.map = {};
     this.mStyles = [
         [
@@ -687,10 +687,11 @@ loadMap(API) {
 
 function FynViewModel() {
     const self = this;
+    self.G = new G_Model()
+    let G = self.G;
 
 // Model Data Storage Section
-// 
-    self.G = new G_Model()
+// ;
     self.intView = ko.observable(false);
 
     self.title = ko.observable(`FYN - Find your Neighborhood`);
@@ -758,7 +759,7 @@ function FynViewModel() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(self.geoSetUserLocation)
         } else {
-            console.log('Geolocation is not supported by this browser');
+            //console.log('Geolocation is not supported by this browser');
         }
     }
     self.geoSetUserLocation = function(position) {
@@ -771,6 +772,7 @@ function FynViewModel() {
         self.User.location.lng = position.geometry.location.lng();
     }
 
+    //Markers
     self.clearMarkers = function(koArray) {
         for (const item of koArray()) { 
             item.marker.setMap(null); 
@@ -785,12 +787,20 @@ function FynViewModel() {
     }
 
     self.showMarkers = function(koArray) {
-        let bounds = self.G.newBounds();
+        let bounds = G.newBounds();
         for (const item of koArray()) { 
             item.marker.setMap(self.G.map); 
             bounds.extend(item.position);
         }
-        self.G.map.fitBounds(bounds);
+        if (koArray().length == 1) {
+
+            G.map.setCenter(
+                koArray()[0] ? koArray()[0].position : G.testMarker
+            )
+            G.map.setZoom(15);
+        } else if (koArray().length > 1) {
+            G.map.fitBounds(bounds);
+        }
     }
 
     // === HOMES ===
@@ -837,6 +847,10 @@ function FynViewModel() {
             this.setIcon(foo.icon);
         });
 
+        this.marker.addListener('click',function() {
+            console.log(`${foo.marker}\n${foo.icon}\n${foo.title}`)
+        })
+
         this.setHome = function() {
             if (foo.saved()) {
                 foo.defIcon = '/images/home-point.png';
@@ -872,7 +886,7 @@ function FynViewModel() {
         },
 
         searchMark: function() {
-            self.hSearch.clearSearch();
+            self.clearMarkers(self.homeActiveItems)
             self.G.textFindPlace({
             query:`${self.hSearch.search()}`,
             fields: ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry']
@@ -881,9 +895,9 @@ function FynViewModel() {
 
         addMark: function(results, status) {
             if (status == google.maps.places.PlacesServiceStatus.OK) {
-                console.log(results);
+                //console.log(results);
                 let x = 0
-                let bounds = self.G.newBounds();
+                let bounds = G.newBounds();
                 for (const result of results) {
                     bounds.extend(result.geometry.location);
                     setTimeout(function() {
@@ -901,24 +915,32 @@ function FynViewModel() {
                     },150*x);
                     x++
                 }
-                self.G.map.fitBounds(bounds);
+                
+                if (results.length <= 1) {
+                    G.map.setCenter(results[0].geometry.location)
+                    G.map.setZoom(15);
+                } else {
+                    G.map.fitBounds(bounds);
+                }
             } else {
                 // console.log(`${results} \n ${status}`);
                 self.error(status);
             }
         },
 
-        clearSearch: () => self.clearMarkers(self.homeActiveItems)
+        clearSearch: function() {
+            self.clearMarkers(self.homeActiveItems)
+            self.hSearch.search('');
+        }
     }
 
     // App Initialization
     //
     //
     self.initApp = function() {
-        const G = self.G
         G.map = new google.maps.Map(G.mapEl, {
             center: G.testMarker,
-            zoom: 11,
+            zoom: 12,
             styles: G.mStyles[0],
             disableDefaultUI:true
         });
