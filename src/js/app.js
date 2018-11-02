@@ -793,15 +793,18 @@ function FynViewModel() {
             bounds.extend(item.position);
         }
         if (koArray().length == 1) {
-
             G.map.setCenter(
                 koArray()[0] ? koArray()[0].position : G.testMarker
             )
-            G.map.setZoom(15);
+            G.map.setZoom(
+                koArray()[0] ? 15 : 12
+                );
         } else if (koArray().length > 1) {
             G.map.fitBounds(bounds);
         }
     }
+
+    // === Primary Class for searchable item ===
 
     // === HOMES ===
     // Data & Controls
@@ -826,7 +829,7 @@ function FynViewModel() {
             url: foo.defIcon,
             size: new google.maps.Size(35,45),
             origin: new google.maps.Point(0,0),
-            anchor: new google.maps.Point(0,45)
+            anchor: new google.maps.Point(0,43)
         }
 
         this.activeIcon = ko.observable(foo.defIcon);
@@ -851,7 +854,7 @@ function FynViewModel() {
             console.log(`${foo.marker}\n${foo.icon}\n${foo.title}`)
         })
 
-        this.setHome = function() {
+        this.prototype.setHome = function() {
             if (foo.saved()) {
                 foo.defIcon = '/images/home-point.png';
                 self.homeSavedItems.remove(foo);
@@ -895,7 +898,7 @@ function FynViewModel() {
 
         addMark: function(results, status) {
             if (status == google.maps.places.PlacesServiceStatus.OK) {
-                //console.log(results);
+                console.log(results);
                 let x = 0
                 let bounds = G.newBounds();
                 for (const result of results) {

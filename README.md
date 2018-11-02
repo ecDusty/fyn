@@ -90,3 +90,4 @@ As I develop on a Windows machine, these instructions are for windows users usin
 ### To Do List
 
 * Add full application description
+* Add Timeout for iView class, so active class is removed, then after scroll away content changes and active class added back.
