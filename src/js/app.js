@@ -816,7 +816,7 @@ function FynViewModel() {
     self.homeSavedItems = ko.observableArray([]);
     self.homeActiveItems = ko.observableArray([]);
 
-    self.homeItem = function(home = { position: {}, title: '', icon: '', iconActiveHover: '', search: '', address: '',  ani: google.maps.Animation.DROP }) {
+    self.HomeItem = function(home = { position: {}, title: '', icon: '', iconActiveHover: '', search: '', address: '',  ani: google.maps.Animation.DROP }) {
         const foo = this;
         this.search = home.search;
         this.saved = ko.observable(false);
@@ -904,7 +904,7 @@ function FynViewModel() {
                 for (const result of results) {
                     bounds.extend(result.geometry.location);
                     setTimeout(function() {
-                        const item = new self.homeItem({
+                        const item = new self.HomeItem({
                             position: result.geometry.location,
                             title: result.name,
                             address: result.formatted_address,
