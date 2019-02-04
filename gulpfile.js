@@ -4,8 +4,6 @@ var strt = '>---Starting ',
 
 //Dependencies Needed
 var gulp = require('gulp');
-var rename = require('gulp-rename');// not sure I need this
-var concat = require('gulp-concat');// not sure I need this
 var srcMaps = require('gulp-sourcemaps');
 var del = require('del');
 var zip = require('gulp-zip');

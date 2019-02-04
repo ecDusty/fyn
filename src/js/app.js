@@ -854,7 +854,7 @@ function FynViewModel() {
             console.log(`${foo.marker}\n${foo.icon}\n${foo.title}`)
         })
 
-        this.prototype.setHome = function() {
+        this.setHome = function() {
             if (foo.saved()) {
                 foo.defIcon = '/images/home-point.png';
                 self.homeSavedItems.remove(foo);
