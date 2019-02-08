@@ -15,7 +15,13 @@ const view = {
 
 let gMap = {}
 
-
+// ===========
+// 
+// Google Maps
+//    Class
+// 
+// ===========
+// This is used to create basic Google Maps functionality that will be called throughout the Application.
 class G_Model {
   constructor(API = 'AIzaSyAaYL795gcBKEjS2Ud2Rb12A7hebgrT-Fc',mapElement = document.getElementById('map')) {
     // Map Settings
@@ -632,7 +638,7 @@ class G_Model {
 
   }
 
-createMarker(mark = { position: {}, title: '', icon: '', ani: ''}) {
+  createMarker(mark = { position: {}, title: '', icon: '', ani: ''}) {
     const marker = { map: null };
 
     mark.position ? marker.position = mark.position : mark.position;
@@ -641,9 +647,9 @@ createMarker(mark = { position: {}, title: '', icon: '', ani: ''}) {
     mark.ani ? marker.animation = mark.ani : marker.animation = google.maps.Animation.DROP;
 
     return new google.maps.Marker(marker);
-}
+  }
 
-textFindPlace(request,callback) {
+  textFindPlace(request,callback) {
     const self = this;
     if (self.Places == null) {
         self.Places = new google.maps.places.PlacesService(self.map)
@@ -651,18 +657,22 @@ textFindPlace(request,callback) {
     } else {
         return self.Places.textSearch(request,callback);
     }
-}
+  }
 
-newBounds() {
+  newBounds() {
     return new google.maps.LatLngBounds();
-}
+  }
 
 // get(libraries){
 //   fetch(`https`)
 // }
 
+  makeLatLng(lat,lng) {
+    return new google.maps.LatLng(lat,lng);
+  }
+
 //Asychronously Load Map scripts
-loadMap(API) {
+  loadMap(API) {
     const gMaps = `https://maps.googleapis.com/maps/api/js`,
         arrayLibraries = [`places`,`geometry`];
 
@@ -674,9 +684,7 @@ loadMap(API) {
 
         document.head.appendChild(script);
     })
-}
-
-
+  }
 }
 
 // KNOCKOUT CODING SECTION
@@ -748,7 +756,7 @@ function FynViewModel() {
             return self.activeMenu() + ' ' + (self.intView() ? 'active' : '');
         }
     });
-    self.searchBounds = ko.observable('Hong Kong');
+    self.searchBounds = '';
     self.User = {};
     self.User.location = {
         lat: null,
@@ -871,6 +879,11 @@ function FynViewModel() {
         }
     }
 
+    // ================
+    //    Home Search
+    //    Functionality
+    // ================
+    // This is the Object that controls all Home search functionality
     self.hSearch = {
         name: ko.observable(''),
         search: ko.observable(''),
@@ -890,9 +903,11 @@ function FynViewModel() {
 
         searchMark: function() {
             self.clearMarkers(self.homeActiveItems)
+            console.log(self.searchBounds)
             self.G.textFindPlace({
-            query:`${self.hSearch.search()}`,
-            fields: ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry']
+              location: self.searchBounds,
+              radius: `4000`,
+              query:`${self.hSearch.search()}`
             }, self.hSearch.addMark);
         },
 
@@ -941,13 +956,16 @@ function FynViewModel() {
     //
     //
     self.initApp = function() {
-        G.map = new google.maps.Map(G.mapEl, {
-            center: G.testMarker,
-            zoom: 12,
-            styles: G.mStyles[0],
-            disableDefaultUI:true
-        });
-        gMap = G.map;
+      G.map = new google.maps.Map(G.mapEl, {
+        center: G.testMarker,
+        zoom: 12,
+        styles: G.mStyles[0],
+        disableDefaultUI:true
+      });
+      gMap = G.map;
+      
+      var HongKong = G.makeLatLng('22.286394','114.149139');
+      self.searchBounds = HongKong;
     }
 
   self.G.loadMap(self.G.API).then(self.initApp)

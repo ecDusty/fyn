@@ -61,10 +61,10 @@
 <script type="text/html" id="Homes">
     <div class="submenu homes">
         <div class="submenu-item" data-bind="css: { active: hSearch.subMenu() == 'add-place' }, click: hSearch.setAdd">
-            <h3>ADD PLACE</h3>
+            <h3>ADD A HOME</h3>
         </div>
         <div class="submenu-item" data-bind="css: { active: hSearch.subMenu() == 'show-list' }, click: hSearch.setList">
-            <h3>SHOW LIST</h3>
+            <h3>SAVED HOMES</h3>
         </div>
     </div>
     <div class="iWrap" data-bind="template: { name: hSearch.subMenu }, css: {add: hSearch.subMenu() == 'add-place', list: hSearch.subMenu() == 'show-list' }">
@@ -73,7 +73,7 @@
 
 <script type="text/html" id="add-place">
     <div class="hSearch">
-        <h2 class="homes title">Find a place</h2>
+        <h2 class="homes title">Find a home</h2>
         <form>
             <input data-bind="textInput: hSearch.search " type="text" placeholder="Place / Address search" name="" id="h-name" class="search">
             <button class="find" data-bind="click: hSearch.searchMark">FIND IT</button>
@@ -105,7 +105,7 @@
 
 <!-- Places interface template -->
 <script type="text/html" id="Places">
-    <div class="hSearch">
+    <div class="Search">
         <h2 class="homes title">Find your favorite places</h2>
         <form>
             <input data-bind="textInput: hSearch.search " type="text" placeholder="Place / Address search" name="" id="h-name" class="search">

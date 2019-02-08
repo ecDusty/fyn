@@ -29,7 +29,7 @@ ul.menuWrap {
             width:35px;
             height:35px;
             margin-bottom: 5px;
-            transition: all 0.15s ease-out;
+            transition: all 0.15s ease-out 0.05s;
         }
 
         p.title {
@@ -53,6 +53,7 @@ ul.menuWrap {
         &.active {
             img {
                 opacity: 0;
+                transition: all 0.15s ease-out;
             }
 
             p.title {
@@ -61,11 +62,11 @@ ul.menuWrap {
 
             &:before, &:after {
                 opacity: 1;
-                transition:all 0.15s ease-out;
+                transition: all 0.10s ease-out;
             }
 
-            &:before { top:50%; }
-            &:after { bottom:50%; }
+            &:before { top:45%; }
+            &:after { bottom:55%; }
         }
 
         &:before, &:after {
