@@ -257,10 +257,10 @@ gulp.task('serve:dist', function() {
   gulp.watch(HTML_PATH, ['html-dist']);
 
   browserSync.init({
-  server: {
-    baseDir: DIST_DIR+'/',
-    domain: 'local.dev'
-  }
+    server: {
+      baseDir: DIST_DIR+'/'
+    },
+    https: false
   });
 
   gulp.watch([DIST_DIR+'/**/*.css', DIST_DIR+'/**/*.js', DIST_DIR+'/**/*.{png,jpeg,jpg,gif,svg}',DIST_DIR+'/{*.html,**/*.html}']).on('change', browserSync.reload);
@@ -279,8 +279,9 @@ gulp.task('serve:dev', ['scripts-dev',
 
   browserSync.init({
       server: {
-      baseDir: TEST_DIR+'/'
-  }
+        baseDir: TEST_DIR+'/'
+      },
+      https: false
   });
 
   gulp.watch(SCRIPTS_PATH, ['scripts-dev-watch']);

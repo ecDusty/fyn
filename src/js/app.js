@@ -671,7 +671,7 @@ class G_Model {
     return new google.maps.LatLng(lat,lng);
   }
 
-  streetViewPic(size = '600x400',location = '', params) {
+  streetViewPic(location = ``, size = `600x400`, params) {
       params ? params = `&${params}&` : params = '';
       return `https://maps.googleapis.com/maps/api/streetview?size=${size}&location=${location}${params}&key=${this.API}`
   }
@@ -819,6 +819,64 @@ function FynViewModel() {
 
   // === Primary Class for searchable item ===
 
+  // === PLACES Class ===
+  /* Here is the base places class that will be used to search for a place, create a marker for it. Save any extra data for the place that may be required, such as location, details, images, etc.
+
+  This class is then used within the Homes Class and the Favorites 
+  */
+  self.Places = function(place = { position: {}, title: '', icon: '', iconActiveHover: '', search: '', address: '',  ani: google.maps.Animation.DROP }) {
+    const foo = this;
+
+    // Needed data points
+    this.search = place.search;
+    this.saved = ko.observable(false)
+    this.position = place.position;
+    this.address = ko.observable(place.address)
+    this.title = place.title;
+    this.defIcon = '/images/home-point.png';
+    this.iconActiveHover = '/images/home-active.png';
+    place.icon = {
+      url: foo.defIcon,
+      size: new google.maps.Size(35,45),
+      origin: new google.maps.Point(0,0),
+      anchor: new google.maps.Point(0,43)
+    }
+
+    // Icon settings
+    this.activeIcon = ko.observable(foo.defIcon);
+    this.icon = place.icon;
+
+    // Marker Setup
+    this.marker = self.G.createMarker(place);
+
+    // Marker Interaction setup
+    this.setActiveIcon = function () {
+      this.icon.url = this.iconActiveHover;
+      this.activeIcon(foo.icon.url);
+    }
+    
+    this.setDefIcon = function () {
+      this.icon.url = this.defIcon;
+      this.activeIcon(foo.icon.url);
+    }
+
+    this.marker.addListener('mouseover',function() {
+      foo.setActiveIcon();
+      this.setIcon(foo.icon);
+    });
+
+    this.marker.addListener('mouseout',function() {
+      foo.setDefIcon();
+      this.setIcon(foo.icon);
+    });
+
+    this.marker.addListener('click',function() {
+      console.log(`${foo.marker}\n${foo.icon}\n${foo.title}`)
+    })
+  }
+
+  // self.Places.prototype.
+
   // === HOMES ===
   // Data & Controls
   //
@@ -830,58 +888,49 @@ function FynViewModel() {
   self.homeActiveItems = ko.observableArray([]);
 
   self.HomeItem = function(home = { position: {}, title: '', icon: '', iconActiveHover: '', search: '', address: '',  ani: google.maps.Animation.DROP }) {
+    self.Places.call(this,home);
+
     const foo = this;
-    this.search = home.search;
-    this.saved = ko.observable(false);
-    this.position = home.position;
-    this.address = ko.observable(home.address)
-    this.title = home.title;
-    this.defIcon = '/images/home-point.png';
-    this.iconActiveHover = '/images/home-active.png';
-    home.icon = {
-      url: foo.defIcon,
-      size: new google.maps.Size(35,45),
-      origin: new google.maps.Point(0,0),
-      anchor: new google.maps.Point(0,43)
+    // this.search = home.search;
+    // this.saved = ko.observable(false);
+    // this.position = home.position;
+    // this.address = ko.observable(home.address)
+    // this.title = home.title;
+    // this.defIcon = '/images/home-point.png';
+    // this.iconActiveHover = '/images/home-active.png';
+    // home.icon = {
+    //   url: foo.defIcon,
+    //   size: new google.maps.Size(35,45),
+    //   origin: new google.maps.Point(0,0),
+    //   anchor: new google.maps.Point(0,43)
+    // }
+
+    console.log(self.G.streetViewPic(foo.position));
+
+    console.log(foo.setActiveIcon)
+
+  }
+
+  // HomeItem functionalitys
+  //
+  self.HomeItem.prototype = Object.create(self.Places.prototype);
+  self.HomeItem.constructor = self.HomeItem;
+
+  self.HomeItem.prototype.setHome = function() {
+    const foo = this;
+    if (foo.saved()) {
+      foo.defIcon = '/images/home-point.png';
+      self.homeSavedItems.remove(foo);
+      self.hSearch.subMenu() == 'show-list' ? foo.marker.setMap(null) : foo.marker;
+    } else {
+      foo.defIcon = '/images/home-saved.png';
+      self.homeSavedItems.push(foo);
     }
 
-    this.activeIcon = ko.observable(foo.defIcon);
-
-    this.icon = home.icon;
-
-    this.marker = self.G.createMarker(home);
-
-    this.marker.addListener('mouseover',function() {
-      foo.icon.url = foo.iconActiveHover;
-      foo.activeIcon(foo.icon.url);
-      this.setIcon(foo.icon);
-    });
-
-    this.marker.addListener('mouseout',function() {
-      foo.icon.url = foo.defIcon;
-      foo.activeIcon(foo.icon.url);
-      this.setIcon(foo.icon);
-    });
-
-    this.marker.addListener('click',function() {
-      console.log(`${foo.marker}\n${foo.icon}\n${foo.title}`)
-    })
-
-    this.setHome = function() {
-      if (foo.saved()) {
-        foo.defIcon = '/images/home-point.png';
-        self.homeSavedItems.remove(foo);
-        self.hSearch.subMenu() == 'show-list' ? foo.marker.setMap(null) : foo.marker;
-      } else {
-        foo.defIcon = '/images/home-saved.png';
-        self.homeSavedItems.push(foo);
-      }
-
-      foo.activeIcon(foo.defIcon);
-      foo.saved(!foo.saved());
-      foo.icon.url = foo.icon.url == foo.activeIcon ? foo.icon.url : foo.defIcon;
-      foo.marker.setIcon(foo.icon);
-    }
+    foo.activeIcon(foo.defIcon);
+    foo.saved(!foo.saved());
+    foo.icon.url = foo.icon.url == foo.activeIcon ? foo.icon.url : foo.defIcon;
+    foo.marker.setIcon(foo.icon);
   }
 
   // ================
@@ -956,8 +1005,29 @@ function FynViewModel() {
       self.hSearch.search('');
     }
   }
+  // END
+  //============
 
-  // App Initialization
+  // === FAVORITES ===
+  // Data & Controls
+  //
+  //
+  //Control Home Interface view
+
+
+  // ================
+  //    Favorites
+  //    Functionality
+  // ================
+  // This is the Object that controls all Places search functionality
+
+
+
+
+  
+  // ========================
+  //   App Initialization
+  // ========================
   //
   //
   self.initApp = function() {
@@ -976,7 +1046,7 @@ function FynViewModel() {
   self.G.loadMap(self.G.API)
   .then(self.initApp)
     .catch(function(response){
-      alert(`Looks like the first URL failed. Time to slowly walk away.\n${response}`);
+      alert(`Looks like the first URL failed. This will be due to an issue with your internet connection. You can see the response error here:\n${response}`);
     })
 }
 var test = new FynViewModel()
