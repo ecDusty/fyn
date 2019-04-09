@@ -850,23 +850,25 @@ function FynViewModel() {
     this.marker = self.G.createMarker(place);
 
     // Marker Interaction setup
-    this.setActiveIcon = function () {
-      this.icon.url = this.iconActiveHover;
-      this.activeIcon(foo.icon.url);
-    }
+    // this.setActiveIcon = function () {
+    //   this.icon.url = this.iconActiveHover;
+    //   this.activeIcon(foo.icon.url);
+    // }
     
-    this.setDefIcon = function () {
-      this.icon.url = this.defIcon;
-      this.activeIcon(foo.icon.url);
-    }
+    // this.setDefIcon = function () {
+    //   this.icon.url = this.defIcon;
+    //   this.activeIcon(foo.icon.url);
+    // }
 
     this.marker.addListener('mouseover',function() {
-      foo.setActiveIcon();
+      // foo.setActiveIcon();
+      foo.setIcon(foo.iconActiveHover);
       this.setIcon(foo.icon);
     });
 
     this.marker.addListener('mouseout',function() {
-      foo.setDefIcon();
+      // foo.setDefIcon();
+      foo.setIcon(foo.defIcon);
       this.setIcon(foo.icon);
     });
 
@@ -875,7 +877,10 @@ function FynViewModel() {
     })
   }
 
-  // self.Places.prototype.
+  // 
+  self.Places.prototype.setIcon = function(url) {
+    this.icon.url = url;
+  }
 
   // === HOMES ===
   // Data & Controls
