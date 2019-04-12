@@ -894,21 +894,7 @@ function FynViewModel() {
 
   self.HomeItem = function(home = { position: {}, title: '', icon: '', iconActiveHover: '', search: '', address: '',  ani: google.maps.Animation.DROP }) {
     self.Places.call(this,home);
-
     const foo = this;
-    // this.search = home.search;
-    // this.saved = ko.observable(false);
-    // this.position = home.position;
-    // this.address = ko.observable(home.address)
-    // this.title = home.title;
-    // this.defIcon = '/images/home-point.png';
-    // this.iconActiveHover = '/images/home-active.png';
-    // home.icon = {
-    //   url: foo.defIcon,
-    //   size: new google.maps.Size(35,45),
-    //   origin: new google.maps.Point(0,0),
-    //   anchor: new google.maps.Point(0,43)
-    // }
 
     console.log(self.G.streetViewPic(foo.position));
   }
