@@ -739,7 +739,7 @@ function FynViewModel() {
     }
   }
 
-  self.menuItems = [
+  this.menuItems = [
     new self.MenuVM(`Homes`,`images/home.svg`),
     new self.MenuVM(`Places`,`images/map.svg`),
     new self.MenuVM(`Filters`,`images/shuffle.svg`),
@@ -862,13 +862,13 @@ function FynViewModel() {
 
     this.marker.addListener('mouseover',function() {
       // foo.setActiveIcon();
-      foo.setIcon(foo.iconActiveHover);
+      foo.iconSet(foo.iconActiveHover);
       this.setIcon(foo.icon);
     });
 
     this.marker.addListener('mouseout',function() {
       // foo.setDefIcon();
-      foo.setIcon(foo.defIcon);
+      foo.iconSet(foo.defIcon);
       this.setIcon(foo.icon);
     });
 
@@ -878,7 +878,7 @@ function FynViewModel() {
   }
 
   // 
-  self.Places.prototype.setIcon = function(url) {
+  self.Places.prototype.iconSet = function(url) {
     this.icon.url = url;
   }
 
@@ -911,9 +911,6 @@ function FynViewModel() {
     // }
 
     console.log(self.G.streetViewPic(foo.position));
-
-    console.log(foo.setActiveIcon)
-
   }
 
   // HomeItem functionalitys
@@ -923,19 +920,21 @@ function FynViewModel() {
 
   self.HomeItem.prototype.setHome = function() {
     const foo = this;
-    if (foo.saved()) {
-      foo.defIcon = '/images/home-point.png';
+    if (this.saved()) {
+      this.defIcon = '/images/home-point.png';
       self.homeSavedItems.remove(foo);
-      self.hSearch.subMenu() == 'show-list' ? foo.marker.setMap(null) : foo.marker;
+      self.hSearch.subMenu() == 'show-list' ? 
+                this.marker.setMap(null) 
+              : this.marker;
     } else {
-      foo.defIcon = '/images/home-saved.png';
+      this.defIcon = '/images/home-saved.png';
       self.homeSavedItems.push(foo);
     }
 
-    foo.activeIcon(foo.defIcon);
-    foo.saved(!foo.saved());
-    foo.icon.url = foo.icon.url == foo.activeIcon ? foo.icon.url : foo.defIcon;
-    foo.marker.setIcon(foo.icon);
+    this.activeIcon(this.defIcon);
+    this.saved(!foo.saved());
+    this.icon.url = this.icon.url == this.activeIcon ? this.icon.url : this.defIcon;
+    this.marker.setIcon(foo.icon);
   }
 
   // ================
@@ -947,6 +946,7 @@ function FynViewModel() {
     name: ko.observable(''),
     search: ko.observable(''),
     subMenu: ko.observable('add-place'),
+    success: ko.observable(false),
 
     setAdd: function() {
       self.hideMarkers(self.homeSavedItems);
@@ -975,6 +975,7 @@ function FynViewModel() {
         console.log(results);
         let x = 0
         let bounds = G.newBounds();
+        self.hSearch.success(true);
         for (const result of results) {
           bounds.extend(result.geometry.location);
           setTimeout(function() {
@@ -1008,6 +1009,7 @@ function FynViewModel() {
     clearSearch: function() {
       self.clearMarkers(self.homeActiveItems)
       self.hSearch.search('');
+      self.hSearch.success(false);
     }
   }
   // END
@@ -1018,10 +1020,13 @@ function FynViewModel() {
   //
   //
   //Control Home Interface view
-
+  this.FavItem = function(fav = { position: {}, title: '', icon: '', iconActiveHover: '', search: '', address: '',  ani: google.maps.Animation.DROP }) {
+    self.Places.call(this,fav);
+    const foo = this;
+  }
 
   // ================
-  //    Favorites
+  //    Favorites Search
   //    Functionality
   // ================
   // This is the Object that controls all Places search functionality
