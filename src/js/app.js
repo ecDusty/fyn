@@ -982,7 +982,7 @@ function FynViewModel() {
         
         if (results.length <= 1) {
           G.map.setCenter(results[0].geometry.location)
-          G.map.setZoom(15);
+          G.map.setZoom(17);
         } else {
           G.map.fitBounds(bounds);
         }
