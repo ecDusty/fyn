@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 //Text Variables
 var strt = '>---Starting ',
   end = ' Task---<';
@@ -35,7 +36,7 @@ var browserSync = require('browser-sync').create();
 
 //Source
 var SCRIPTS_PATH = 'src/js/{*.js,**/*.js}',
-  HTML_PATH = 'src/*.html',
+  HTML_PATH = 'src/{*.html,*/*.html}',
   IMG_PATH = 'src/images/*.{png,jpeg,jpg,gif,svg}',
   SCSS_PATH = 'src/scss/{*,**/*}.scss',
   JAS_PATH = 'src/jasmine/{*,**/*,**/**/*}',
