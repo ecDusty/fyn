@@ -18,6 +18,7 @@ var inlineSource = require('gulp-inline-source');
 var eslint = require('gulp-eslint');
 var uglify = require('gulp-uglify');
 var babel = require('gulp-babel');
+var concat = require('gulp-concat');
 
 //Styles Dependencies
 var autoprefixer = require('gulp-autoprefixer');
@@ -35,7 +36,7 @@ var browserSync = require('browser-sync').create();
 
 
 //Source
-var SCRIPTS_PATH = 'src/js/{*.js,**/*.js}',
+var SCRIPTS_PATH = '{src/components/g-maps/g-maps.js,src/js/app.js}',
   HTML_PATH = 'src/{*.html,*/*.html}',
   IMG_PATH = 'src/images/*.{png,jpeg,jpg,gif,svg}',
   SCSS_PATH = 'src/scss/{*,**/*}.scss',
@@ -97,6 +98,7 @@ gulp.task('scripts-dist',['lint-dist'], function () {
   console.log(strt + 'SCRIPTS for DIST' + end);
 
   return gulp.src(SCRIPTS_PATH)
+    .pipe(concat('app.js'))
     .pipe(babel())
     .pipe(uglify())
     .pipe(gulp.dest(DIST_JS));
@@ -111,6 +113,7 @@ gulp.task('scripts-dev',['lint-dev'], function () {
 
   return gulp.src(SCRIPTS_PATH)
     .pipe(srcMaps.init())
+    .pipe(concat('app.js'))
     .pipe(babel())
     .pipe(srcMaps.write())
     .pipe(gulp.dest(TEST_JS));
@@ -181,7 +184,6 @@ gulp.task('resources-dist', function () {
 =    HTML    =
 =  for Dist   =
 =============*/
-
 // Unfortunately inlinesource and htmlMinify don't play nice
 //
 

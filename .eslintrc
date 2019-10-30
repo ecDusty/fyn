@@ -8,5 +8,14 @@
   "extends" : "eslint:recommended",
   "rules" : { 
     "no-unused-vars": "off"
+  },
+  "globals": {
+    "google": "readonly",
+    "ko": "readonly",
+    "console": "readonly",
+    "G_Model": "writable"
+  },
+  "parserOptions": {
+    "sourceType": "module"
   }
 }
