@@ -134,7 +134,7 @@ function FynViewModel() {
 
   This class is then used within the Homes Class and the Favorites
   */
-  self.Places = function(place = { position: {}, title: '', icon: '', iconActiveHover: '', search: '', address: '',  ani: google.maps.Animation.DROP }) {
+  self.Places = function(place = { position: {}, title: '', icon: '', iconActiveHover: '', search: '', address: '',  ani: google.maps.Animation.DROP, place_id: '', saved: false, activeSearch: false }) {
     const foo = this;
 
     // Needed data points
@@ -146,6 +146,9 @@ function FynViewModel() {
     this.defIcon = '/images/home-point.png';
     this.iconActiveHover = '/images/home-active.png';
     this.mapFocused = false;
+    this.place_id = place.place_id;
+    this.saved = place.saved ? ko.observable(place.saved) : ko.observable(false);
+    this.activeSearch = place.activeSearch ? ko.observable(place.activeSearch) : ko.observable(false);
     place.icon = {
       url: foo.defIcon,
       size: new google.maps.Size(35,45),
@@ -173,7 +176,7 @@ function FynViewModel() {
     });
 
     this.marker.addListener('click',function() {
-      console.log(`${foo.marker}\n${foo.icon.url}\n${foo.title}`);
+      // console.log(`${foo.marker}\n${foo.icon.url}\n${foo.title}`);
       self.G.map.panTo(foo.position)
     });
   }
@@ -193,12 +196,13 @@ function FynViewModel() {
   //Searching for homes
   self.homeSavedItems = ko.observableArray([]);
   self.homeActiveItems = ko.observableArray([]);
+  self.homeItems = ko.observableArray([]);
 
-  self.HomeItem = function(home = { position: {}, title: '', icon: '', iconActiveHover: '', search: '', address: '',  ani: google.maps.Animation.DROP }) {
+  self.HomeItem = function(home = { position: {}, title: '', icon: '', iconActiveHover: '', search: '', address: '',  ani: google.maps.Animation.DROP, place_id: ''  }) {
     self.Places.call(this,home);
     const foo = this;
 
-    console.log(self.G.streetViewPic(foo.position));
+    // console.log(self.G.streetViewPic(foo.position));
   }
 
   // HomeItem functionalitys
@@ -250,7 +254,7 @@ function FynViewModel() {
 
     searchMark: function() {
       self.clearMarkers(self.homeActiveItems)
-      console.log(self.searchBounds)
+      // console.log(self.searchBounds)
       self.G.textFindPlace({
         location: self.searchBounds,
         radius: `4000`,
@@ -258,9 +262,15 @@ function FynViewModel() {
       }, self.hSearch.addMark);
     },
 
+    checkMarkExist: function(mark) {
+      // const foundItem =
+
+      self.homeActiveItems.push(mark);
+    },
+
     addMark: function(results, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
-        console.log(results);
+        // console.log(results);
         let x = 0
         let bounds = G.newBounds();
         self.hSearch.success(true);
@@ -271,13 +281,15 @@ function FynViewModel() {
               position: result.geometry.location,
               title: result.name,
               address: result.formatted_address,
-              search: self.hSearch.search()
+              search: self.hSearch.search(),
+              place_id: result.place_id
             });
             if (self.hSearch.subMenu() == 'add-place')
               item.marker.setMap(self.G.map)
             else
               item.marker.setMap(null);
-            self.homeActiveItems.push(item);
+
+            self.hSearch.checkMarkExist(item);
           },((90-2*x)*x));
           x++
         }
@@ -331,12 +343,26 @@ function FynViewModel() {
   self.initApp = function() {
     const HongKong = G.makeLatLng('22.286394','114.149139');
 
+
+
     G.map = new google.maps.Map(G.mapEl, {
-      center: G.testMarker,
+      center: HongKong,
       zoom: 12,
       styles: G.mStyles[0].styles,
-      disableDefaultUI:true
+      zoomControl: false,
+      mapTypeControl: false,
+      fullscreenControl: false,
+      streetViewControl: true,
+
+      mapTypeControlOptions: {
+        mapTypeIds: ['fyn', 'batman']
+      }
     });
+    G.map.mapTypes.set('fyn', new google.maps.StyledMapType(G.mStyles[0].styles, {name: G.mStyles[0].name, typeId: 'terrain'}));
+    G.map.mapTypes.set('batman', new google.maps.StyledMapType(G.mStyles[1].styles, {name: G.mStyles[1].name}));
+    G.map.setMapTypeId('fyn');
+    G.map.mapTypeId = 'terrain';
+
     // gMap = G.map;
     self.searchBounds = HongKong;
   }

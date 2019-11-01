@@ -36,7 +36,7 @@ var browserSync = require('browser-sync').create();
 
 
 //Source
-var SCRIPTS_PATH = '{src/components/g-maps/g-maps.js,src/js/app.js}',
+var SCRIPTS_PATH = 'src/{components/g-maps,js}/*.js',
   HTML_PATH = 'src/{*.html,*/*.html}',
   IMG_PATH = 'src/images/*.{png,jpeg,jpg,gif,svg}',
   SCSS_PATH = 'src/scss/{*,**/*}.scss',
@@ -98,7 +98,7 @@ gulp.task('scripts-dist',['lint-dist'], function () {
   console.log(strt + 'SCRIPTS for DIST' + end);
 
   return gulp.src(SCRIPTS_PATH)
-    .pipe(concat('app.js'))
+    .pipe(concat('all.js'))
     .pipe(babel())
     .pipe(uglify())
     .pipe(gulp.dest(DIST_JS));
@@ -111,9 +111,9 @@ gulp.task('scripts-dist',['lint-dist'], function () {
 gulp.task('scripts-dev',['lint-dev'], function () {
   console.log(strt + 'SCRIPTS DEV' + end);
 
-  return gulp.src(SCRIPTS_PATH)
+  return gulp.src(['./src/components/g-maps/*.js','./src/js/*.js'])
     .pipe(srcMaps.init())
-    .pipe(concat('app.js'))
+    .pipe(concat('all.js'))
     .pipe(babel())
     .pipe(srcMaps.write())
     .pipe(gulp.dest(TEST_JS));
