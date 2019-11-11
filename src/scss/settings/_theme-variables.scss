@@ -4,6 +4,7 @@ $theme1-c2:#087E8B;
 $theme1-c3:#CDEDF6;
 $theme1-c4:#BFD7EA;
 $theme1-c5:#FF5A5F;
+$theme1-c6: #13ACBD;
 
 //Second theme idea
 $theme2-c1:#55D6BE;
@@ -18,7 +19,7 @@ $activeT-c3: $theme1-c3;
 $activeT-c4: $theme1-c4;
 $activeT-c5: $theme1-c5;
 
-$interface-bg: rgba(19, 172, 189, 0.8);
+$interface-bg: $theme1-c6;
 
 $menu-border: 1px solid $activeT-c4;
 $menu-bg: $activeT-c1;

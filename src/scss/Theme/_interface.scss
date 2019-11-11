@@ -10,10 +10,14 @@
 
 h1,h2,h3,h4,h5,p {
     color:$white;
+    font-weight: 600;
 }
 
 h1 { font-size:2em; }
-h2 { font-size: 1.5em; }
+h2 { font-size: 1.3em; transition: font-size 0.25s linear }
+
+.searching h2 { font-size:0.7em  }
+
 
 #interface {
     height: 65px;
@@ -32,7 +36,8 @@ h2 { font-size: 1.5em; }
         position: absolute;
         background: $interface-bg;
         bottom: 100%;
-        display: block;
+        display: flex;
+        flex-wrap: wrap;
         z-index:0;
         overflow: hidden;
         transform: translateY(100%);
@@ -53,6 +58,7 @@ h2 { font-size: 1.5em; }
             background-color: $submenu-bgColor;
             order:2;
             display: flex;
+            width: 100%;
             height: 42.2px;
 
             .submenu-item {
@@ -60,7 +66,7 @@ h2 { font-size: 1.5em; }
                 border-top: $submenu-border;
                 cursor: pointer;
                 width: 50%;
-                padding: 13px 10px;
+                padding: 9px 10px;
 
                 &:last-child {
                     border-right: none;
@@ -69,11 +75,13 @@ h2 { font-size: 1.5em; }
                 h3 {
                     text-align: center;
                     font-size: 0.8em;
+                    line-height:
                     margin: 0;
                 }
 
                 &.active {
                     background-color: $interface-bg;
+                    border-top: none;
                 }
             }
 
@@ -82,27 +90,38 @@ h2 { font-size: 1.5em; }
 
         form {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+            flex-wrap: nowrap;
             margin-bottom: 0px;
             border-radius: 5px;
-            overflow:hidden;
+            overflow: hidden;
 
             input {
-                width: 100%;
+                width: calc(100% - 80px);
                 margin-bottom: 0px;
-                padding: 10px;
+                padding: 7px 10px;
                 border: none;
             }
         }
 
         button {
-            padding: 5px 15px;
+            padding: 8px 11px;
             border: none;
             color: #fff;
             cursor: pointer;
             flex-grow:1;
             font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 50px;
+            width: 100%;
+            min-width: 30px;
+
+            svg {
+                width: 20px;
+                height: 20px;
+                fill: #ffffff;
+            }
         }
 
         .find { background: $button-color-pos; }
@@ -111,6 +130,7 @@ h2 { font-size: 1.5em; }
 
         .iWrap {
             padding: 10px;
+            width: 100%;
 
             .Results {
                 max-height: 160px;
@@ -173,11 +193,9 @@ h2 { font-size: 1.5em; }
             }
         }
     }
-}
 
-@media screen and (min-width:992px){
-    #interface {
-        max-width:400px;
+    @media screen and (min-width:992px) {
+        max-width: 400px;
         height:auto;
         max-height: 100vh;
 
@@ -195,11 +213,14 @@ h2 { font-size: 1.5em; }
                 .submenu-item {
                     border-top: none;
                     border-bottom: $submenu-border;
+
+                    &.active {
+                        border-bottom: none;
+                    }
                 }
             }
 
             .iWrap {
-
                 .Results {
                     max-height: 100%;
                 }
@@ -207,3 +228,4 @@ h2 { font-size: 1.5em; }
         }
     }
 }
+

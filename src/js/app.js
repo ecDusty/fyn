@@ -9,20 +9,19 @@
 //
 
 function FynViewModel() {
-    const self = this;
-    self.G = new G_Model()
-    let G = self.G;
+  const self = this;
+  self.G = new G_Model()
+  let G = self.G;
 
-// Model Data Storage Section
-// ;
-    self.intView = ko.observable(false);
+  // Model Data Storage Section
+  // ;
+  self.intView = ko.observable(false);
 
-    self.title = ko.observable(`FYN - Find your Neighborhood`);
-    self.activeInterface = ko.observable();
-    self.error = ko.observable(false);
+  self.title = ko.observable(`FYN - Find your Neighborhood`);
+  self.activeInterface = ko.observable();
+  self.error = ko.observable(false);
 
-//
-//
+  //
 
 
   //Menu Data & Controls
@@ -72,6 +71,10 @@ function FynViewModel() {
     }
   });
   self.searchBounds = '';
+
+  // === User Info ===
+  // Here we have all the user stored info
+  // to offer a more personalized start for search
   self.User = {};
   self.User.location = {
     lat: null,
@@ -237,6 +240,7 @@ function FynViewModel() {
   self.hSearch = {
     name: ko.observable(''),
     search: ko.observable(''),
+    searched: ko.observable(false),
     subMenu: ko.observable('add-place'),
     success: ko.observable(false),
 
@@ -258,19 +262,40 @@ function FynViewModel() {
       self.G.textFindPlace({
         location: self.searchBounds,
         radius: `4000`,
-        query:`${self.hSearch.search()}`
+        query: `${self.hSearch.search()}`
       }, self.hSearch.addMark);
     },
 
     checkMarkExist: function(mark) {
       // const foundItem =
-
-      self.homeActiveItems.push(mark);
+      
+      if (self.homeSavedItems().length > 1) {
+        const matched = ko.utils.arrayFilter(self.hSearch.homeSavedItems, function(item) {
+            return item.place_id == mark.place_id;
+          });
+        if (matched.length > 0) {
+          console.log(mark.place_id)
+          matched().forEach((item) => {
+            console.log(item.place_id);
+            item.marker.setMap(self.G.mapEl);
+            if (item.place_id === mark.place_id) {
+              console.log(item.place_id);
+              item.marker.setMap(self.G.mapEl);
+            }
+          }) ;
+        }
+      } else {
+        self.homeActiveItems.push(mark);
+      }
     },
 
     addMark: function(results, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
         // console.log(results);
+
+        // Places have been found, so apply searching state
+      self.hSearch.searched(true);
+
         let x = 0
         let bounds = G.newBounds();
         self.hSearch.success(true);
@@ -294,9 +319,11 @@ function FynViewModel() {
           x++
         }
 
-        if (results.length <= 1) {
+        if (results.length = 1) {
           G.map.setCenter(results[0].geometry.location)
           G.map.setZoom(17);
+        } else if (results.length = 0) {
+
         } else {
           G.map.fitBounds(bounds);
         }
@@ -310,6 +337,7 @@ function FynViewModel() {
       self.clearMarkers(self.homeActiveItems)
       self.hSearch.search('');
       self.hSearch.success(false);
+      self.hSearch.searched(false);
     }
   }
   // END
@@ -373,5 +401,10 @@ function FynViewModel() {
       alert(`Looks like the first URL failed. This will be due to an issue with your internet connection. You can see the response error here:\n${response}`);
     })
 }
+
+FynViewModel.prototype.testFeature = function(test) {
+  console.log(testing something out);
+}
+
 const fyn = new FynViewModel()
 ko.applyBindings(fyn);

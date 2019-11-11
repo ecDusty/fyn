@@ -1,1 +1,26 @@
-@import "Theme/header";
+@import './settings/settings';
+
+// ============
+// 
+//     FYN
+//   Specific
+//    Styles
+//
+//  ===========
+.logo-Wrapper {
+	max-width:150px;
+	position: fixed;
+	top: 5px;
+	right: 5px;
+  
+	.logo {
+	  width: 100%;
+	  max-width:150px;
+	}
+  }
+  
+  //Load the app styles
+  @import "./outsourced";
+  @import "./menu";
+  @import "./interface";
+  @import "./map";

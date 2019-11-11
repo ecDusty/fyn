@@ -71,7 +71,7 @@
             <h3>SAVED HOMES</h3>
         </div>
     </div>
-    <div class="iWrap" data-bind="template: { name: hSearch.subMenu }, css: {add: hSearch.subMenu() == 'add-place', list: hSearch.subMenu() == 'show-list' }">
+    <div class="iWrap" data-bind="template: { name: hSearch.subMenu }, css: {add: hSearch.subMenu() == 'add-place', list: hSearch.subMenu() == 'show-list', searching: hSearch.searched() }">
     </div>
 </script>
 
@@ -80,15 +80,14 @@
         <h2 class="homes title">Find a home</h2>
         <form>
             <input data-bind="textInput: hSearch.search " type="text" placeholder="Place / Address search" name="" id="h-name" class="search">
-            <button class="find" data-bind="click: hSearch.searchMark">FIND IT</button>
-            <button class="clear" data-bind="click: hSearch.clearSearch">CLEAR SEARCH</button>
+            <button class="find" data-bind="click: hSearch.searchMark"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search-location" class="svg-inline--fa fa-search-location fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505.04 442.66l-99.71-99.69c-4.5-4.5-10.6-7-17-7h-16.3c27.6-35.3 44-79.69 44-127.99C416.03 93.09 322.92 0 208.02 0S0 93.09 0 207.98s93.11 207.98 208.02 207.98c48.3 0 92.71-16.4 128.01-44v16.3c0 6.4 2.5 12.5 7 17l99.71 99.69c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.59.1-33.99zm-297.02-90.7c-79.54 0-144-64.34-144-143.98 0-79.53 64.35-143.98 144-143.98 79.54 0 144 64.34 144 143.98 0 79.53-64.35 143.98-144 143.98zm.02-239.96c-40.78 0-73.84 33.05-73.84 73.83 0 32.96 48.26 93.05 66.75 114.86a9.24 9.24 0 0 0 14.18 0c18.49-21.81 66.75-81.89 66.75-114.86 0-40.78-33.06-73.83-73.84-73.83zm0 96c-13.26 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24z"></path></svg></button>
+            <button class="clear" data-bind="click: hSearch.clearSearch"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="eraser" class="svg-inline--fa fa-eraser fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M497.941 273.941c18.745-18.745 18.745-49.137 0-67.882l-160-160c-18.745-18.745-49.136-18.746-67.883 0l-256 256c-18.745 18.745-18.745 49.137 0 67.882l96 96A48.004 48.004 0 0 0 144 480h356c6.627 0 12-5.373 12-12v-40c0-6.627-5.373-12-12-12H355.883l142.058-142.059zm-302.627-62.627l137.373 137.373L265.373 416H150.628l-80-80 124.686-124.686z"></path></svg></button>
         </form>
     </div>
     <div class="Results" data-bind="template: { name: 'homeSearch', foreach: homeActiveItems, as: 'item' }"></div>
 </script>
 
 <script type="text/html" id="show-list">
-    <h2 class="title">Saved places</h2>
     <div class="Results" data-bind="template: { name: 'homeSearch', foreach: homeSavedItems, as: 'item' }"></div>
 </script>
 
@@ -99,7 +98,7 @@
             <img data-bind="attr: {src: item.activeIcon}">
         </div>
         <div class="search-details">
-            <button class="" data-bind="css: { save: item.saved() == false, remove: item.saved() == true }, click: setHome"></button>
+            <button class="" data-bind="css: { save: item.saved() == false, remove: item.saved() == 'true' }, click: setHome"></button>
             <h4 data-bind="text: item.title"></h4>
             <p class="address" data-bind="text: item.address"></p>
             <p class="search" data-bind="">Search: <span data-bind="text: item.search"></span></p>
@@ -132,7 +131,6 @@
 	<!-- Defferred CSS Styles -->
 	<noscript id="deferred-styles">
 		<link href="css/style.css" rel="stylesheet">
-		<!-- <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> -->
 	</noscript>
 	<script>
 	  var loadDeferredStyles = function() {

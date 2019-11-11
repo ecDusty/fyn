@@ -1,9 +1,9 @@
 // Settings
 // ============================================================================
 @import "../bootstrap/functions";
-@import "../settings/theme-variables";
-@import "../settings/basic-reset";
-@import "../settings/bootstrap-variables";
+@import "./theme-variables";
+@import "./basic-reset";
+@import "./bootstrap-variables";
 
 // // Primary variables and mixins
  @import "../bootstrap/variables";
@@ -54,28 +54,3 @@
 // @import "../bootstrap/utilities/spacing";
 // @import "../bootstrap/utilities/text";
 // @import "../bootstrap/utilities/visibility";
-
-// ============
-// 
-//     FYN
-//   Specific
-//    Styles
-
-//  ===========
-.logo-Wrapper {
-  max-width:150px;
-  position: fixed;
-  top: 5px;
-  right: 5px;
-
-  .logo {
-    width: 100%;
-    max-width:150px;
-  }
-}
-
-//Load the app styles
-@import "./outsourced";
-@import "./menu";
-@import "./interface";
-@import "./map";
