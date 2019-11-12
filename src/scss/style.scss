@@ -3,9 +3,31 @@
 // Outsourced special styles
 @import "../components/outsourced/outsourced";
 
-//Load the app styles
+// ===============
+// Load the app styles
+
+// Intro load
 @import "../components/intro/intro";
+
+// General Interface & Menu Styles
 @import "../components/menu/menu";
 @import "../components/interface/interface";
+
+// Homes Tab
+@import "../components/homes/homes";
+
+// Favorites Tab
+@import "../components/favorites/favorites";
+
+// filters tab
+@import "../components/filters/filters";
+
+// settings tab
+@import "../components/settings/settings";
+
+// Special Animations
 @import "../components/Loading-ring-icon/loading-ring";
+
+// The Map styles
 @import "../components/g-maps/g-maps.scss";
+
