@@ -1,26 +1,11 @@
 @import './settings/settings';
 
-// ============
-// 
-//     FYN
-//   Specific
-//    Styles
-//
-//  ===========
-.logo-Wrapper {
-	max-width:150px;
-	position: fixed;
-	top: 5px;
-	right: 5px;
-  
-	.logo {
-	  width: 100%;
-	  max-width:150px;
-	}
-  }
-  
-  //Load the app styles
-  @import "./outsourced";
-  @import "./menu";
-  @import "./interface";
-  @import "./map";
+// Outsourced special styles
+@import "../components/outsourced/outsourced";
+
+//Load the app styles
+@import "../components/intro/intro";
+@import "../components/menu/menu";
+@import "../components/interface/interface";
+@import "../components/Loading-ring-icon/loading-ring";
+@import "../components/g-maps/g-maps.scss";

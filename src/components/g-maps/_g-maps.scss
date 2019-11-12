@@ -1,0 +1,15 @@
+//=====
+// Main Map Styles
+//
+
+#map {
+	height:100%;
+	max-height:calc(100% - 65px);
+	background-color: $activeT-c3;
+}
+  
+@media screen and (min-width:992px){
+	#map {
+		max-height: 100%;
+	}
+}

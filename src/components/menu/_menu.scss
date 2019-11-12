@@ -1,0 +1,109 @@
+/*================
+   FYN - Menu
+         Styles
+=================*/
+#menu {
+	z-index:10;
+}
+ul.menuWrap {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	display: flex;
+	border-top: $menu-border;
+	cursor: pointer;
+	background-color:$menu-bg;
+
+	.menuItem {
+		flex-grow:1;
+		position: relative;
+		text-align: center;
+		padding: 12px 7.5px;
+		border-right: $menu-border;
+		overflow:hidden;
+		transition: all 0.15s ease-out;
+		width: 25%;
+
+		img {
+			width:35px;
+			height:35px;
+			margin-bottom: 5px;
+			transition: all 0.15s ease-out 0.05s;
+		}
+
+		p.title {
+			position: absolute;
+			font-size: 0.6em;
+			margin: 0;
+			top: 100%;
+			transform: translateX(-50%);
+			left: 50%;
+			z-index:99;
+			transition: all 0.15s ease-out;
+			animation: menuTitles 2s ease-out ;
+		}
+
+		&:hover {
+			p.title { transition: all 0.05s ease-out; }
+		}
+
+		&:last-child { border-right: none; }
+
+		&.active {
+			img {
+				opacity: 0;
+				transition: all 0.15s ease-out;
+			}
+
+			p.title {
+				top: 45px;
+			}
+
+			&:before, &:after {
+				opacity: 1;
+				transition: all 0.10s ease-out;
+			}
+
+			&:before { top:45%; }
+			&:after { bottom:55%; }
+		}
+
+		&:before, &:after {
+			position:absolute;
+			height: 30px;
+			width: 30px;
+			left: 50%;
+			opacity: 0;
+			transition:all 0.15s ease-in;
+		}
+
+		&:before {
+			content: url('../images/chevron-down.svg');
+			top: -10%;
+			transform: translate(-50%,-65%);
+		}
+
+		&:after {
+			content: url('../images/chevron-up.svg');
+			bottom: -20%;
+			transform: translate(-50%,65%);
+		}
+
+	}
+
+	&:hover {
+		p.title { top: 45px; }
+	}
+
+	@media screen and (min-width: 992px) {
+		border-top: none;
+		border-bottom: $menu-border;
+	}
+}
+
+@keyframes menuTitles {
+	0% { top: 45px; }
+	92% { top: 45px; }
+	100% { top: 100%; }
+}

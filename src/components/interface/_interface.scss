@@ -1,0 +1,231 @@
+@keyframes viewScrollMobile {
+	0% { transform: translateY(100%); }
+	100% { transform: translateY(0); }
+}
+
+@keyframes viewHScroll {
+	0% { transform: translateY(-100%); }
+	100% { transform: translateY(0); }
+}
+
+h1,h2,h3,h4,h5,p {
+	color:$white;
+	font-weight: 600;
+}
+
+h1 { font-size:2em; }
+h2 { font-size: 1.3em; transition: font-size 0.25s linear }
+
+.searching h2 { font-size:0.7em  }
+
+
+#interface {
+	height: 65px;
+	overflow: visible;
+	background-color: $interface-bg;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+
+	&.right {
+		order:3;
+	}
+
+	#iView {
+		width: 100%;
+		position: absolute;
+		background: $interface-bg;
+		bottom: 100%;
+		display: flex;
+		flex-wrap: wrap;
+		z-index:0;
+		overflow: hidden;
+		transform: translateY(100%);
+
+		&.active{
+			height: auto;
+			animation-duration: 0.4s;
+			animation-timing-function: ease-out;
+			animation-name: viewScrollMobile;
+			transform: translateY(0);
+		}
+
+		.title {
+			margin-top: 0px;
+		}
+
+		.submenu {
+			background-color: $submenu-bgColor;
+			order:2;
+			display: flex;
+			width: 100%;
+			height: 42.2px;
+
+			.submenu-item {
+					border-right: $submenu-border;
+					border-top: $submenu-border;
+					cursor: pointer;
+					width: 50%;
+					padding: 9px 10px;
+
+					&:last-child {
+							border-right: none;
+					}
+
+					h3 {
+							text-align: center;
+							font-size: 0.8em;
+							line-height:
+							margin: 0;
+					}
+
+					&.active {
+							background-color: $interface-bg;
+							border-top: none;
+					}
+			}
+
+
+		}
+
+		form {
+			display: flex;
+			flex-wrap: nowrap;
+			margin-bottom: 0px;
+			border-radius: 5px;
+			overflow: hidden;
+
+			input {
+					width: calc(100% - 80px);
+					margin-bottom: 0px;
+					padding: 7px 10px;
+					border: none;
+			}
+		}
+
+		button {
+			padding: 8px 11px;
+			border: none;
+			color: #fff;
+			cursor: pointer;
+			flex-grow:1;
+			font-weight: 700;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			max-width: 50px;
+			width: 100%;
+			min-width: 30px;
+
+			svg {
+					width: 20px;
+					height: 20px;
+					fill: #ffffff;
+			}
+		}
+
+		.find { background: $button-color-pos; }
+
+		.clear { background: $button-color-neg; }
+
+		.iWrap {
+			padding: 10px;
+			width: 100%;
+
+			.Results {
+				max-height: 160px;
+				overflow: auto;
+			}
+
+			.searchItem {
+				display: flex;
+				padding: 7px;
+
+				.image {
+					margin-top: 3px;
+					margin-right:3px;
+					width: 20px;
+					min-width:20px;
+				}
+
+				.search-details {
+					flex-grow: 1;
+
+					h4 {
+							font-size: 1.3em;
+							margin: 0;
+					}
+
+					p {
+							margin-bottom: 0;
+					}
+
+					.address {
+							font-size: 0.9em;
+					}
+
+					.search {
+							font-size: 0.7em;
+							text-align:right;
+					}
+				}
+
+				button {
+					font-size: 0.7em;
+					float: right;
+
+					&.save {
+						background: $button-color-pos;
+
+						&::before {
+							content: 'SAVE'
+						}
+					}
+
+					&.remove {
+						background: $button-color-neg;
+
+						&::before {
+							content: 'DELETE'
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@media screen and (min-width:992px) {
+		max-width: 400px;
+		height:auto;
+		max-height: 100vh;
+
+		#iView {
+			position: static;
+			background-color: transparent;
+
+			&.active {
+				animation-name: viewHScroll;
+			}
+
+			.submenu {
+				order: 0;
+
+				.submenu-item {
+						border-top: none;
+						border-bottom: $submenu-border;
+
+						&.active {
+							border-bottom: none;
+						}
+				}
+			}
+
+			.iWrap {
+				.Results {
+					max-height: 100%;
+				}
+			}
+		}
+	}
+}
+

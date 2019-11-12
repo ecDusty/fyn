@@ -1,0 +1,46 @@
+@keyframes dotOne {
+	0% { opacity: 0; }
+	19% { opacity: 0; }
+	20% { opacity: 1; }
+	100% { opacity: 1; }
+}
+@keyframes dotTwo {
+	0% { opacity: 0; }
+	44% { opacity: 0; }
+	45% { opacity: 1; }
+	100% { opacity: 1; }
+}
+@keyframes dotThree {
+	0% { opacity: 0; }
+	69% { opacity: 0; }
+	70% { opacity: 1; }
+	100% { opacity: 1; }
+}
+
+.ldsring {
+	margin:0 auto;
+}
+
+.loading {
+	text-align: center;
+	padding-top: calc(50vh - 1.7em);
+	color: $activeT-c2;
+
+	span {
+		margin-right:5px;
+		display: none;
+	}
+
+	.dotOne {
+		animation: dotOne 2s linear infinite;
+	}
+
+	.dotTwo {
+		animation: dotTwo 2s linear infinite;
+	}
+
+	.dotThree {
+		animation: dotThree 2s linear infinite;
+	}
+}
+
