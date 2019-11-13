@@ -374,6 +374,13 @@
 // import gulp
 import gulp from "gulp";
 
+// Import `src` and `dest` from gulp for use in the task.
+const { src, dest, parallel, series, watch } = require('gulp');
+
+// Import Gulp plugins.
+const babel = require('gulp-babel');
+const plumber = require('gulp-plumber');
+
 // define functions
 const hello = (done) => {
     console.log("Hello");
@@ -386,4 +393,24 @@ const world = (done) => {
 }
 
 // Expose helloworld series task
-exports.helloworld = gulp.series(hello, world);
+exports.default = series(hello, world);
+
+
+const scripts = (done) => {
+    return src('./src/js/app.js')
+    // Stop the process if an error is thrown.
+    .pipe(plumber())
+    // Transpile the JS code using Babel's preset-env.
+    .pipe(babel({
+        presets: [
+          ['@babel/env', {
+            modules: false
+          }]
+        ]
+      }))
+      // Save each component as a separate file in dist.
+      .pipe(dest('./dist'))
+
+}
+
+https://cobwwweb.com/compile-es6-code-gulp-babel-part-1
