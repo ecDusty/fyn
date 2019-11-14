@@ -372,7 +372,7 @@
 
 
 // import gulp
-import gulp from "gulp";
+// import gulp from "gulp";
 
 // Import `src` and `dest` from gulp for use in the task.
 const { src, dest, parallel, series, watch } = require('gulp');
@@ -380,6 +380,19 @@ const { src, dest, parallel, series, watch } = require('gulp');
 // Import Gulp plugins.
 const babel = require('gulp-babel');
 const plumber = require('gulp-plumber');
+const parseArgs = require('minimist');
+const eslint = require('gulp-eslint');
+
+/**
+ *
+ * Configuration Variables
+ */
+
+ const config = {
+   inputDir: './src/',
+   dist: './dist/',
+   env: parseArgs(process.argv).env
+ }
 
 // define functions
 const hello = (done) => {
@@ -392,25 +405,29 @@ const world = (done) => {
     done();
 }
 
-// Expose helloworld series task
-exports.default = series(hello, world);
 
 
 const scripts = (done) => {
     return src('./src/js/app.js')
     // Stop the process if an error is thrown.
-    .pipe(plumber())
+    // .pipe(plumber())
+    .pipe(eslint({
+      "rules": {
+      'no-console': 0
+      }
+    }))
+    .pipe(eslint.format())
+    .pipe(eslint.failOnError())
     // Transpile the JS code using Babel's preset-env.
     .pipe(babel({
-        presets: [
-          ['@babel/env', {
-            modules: false
-          }]
-        ]
+        presets: ['@babel/env']
       }))
       // Save each component as a separate file in dist.
       .pipe(dest('./dist'))
-
 }
 
-https://cobwwweb.com/compile-es6-code-gulp-babel-part-1
+
+// Expose helloworld series task
+exports.default = series(hello, world, scripts);
+
+// https://cobwwweb.com/compile-es6-code-gulp-babel-part-1

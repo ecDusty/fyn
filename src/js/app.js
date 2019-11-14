@@ -1009,10 +1009,10 @@ function FynViewModel() {
           x++
         }
 
-        if (results.length = 1) {
+        if (results.length === 1) {
           G.map.setCenter(results[0].geometry.location)
           G.map.setZoom(17);
-        } else if (results.length = 0) {
+        // } else if (results.length === 0) {
 
         } else {
           G.map.fitBounds(bounds);
@@ -1068,6 +1068,7 @@ function FynViewModel() {
 //
 //
 FynViewModel.prototype.initApp = () => {
+  const G = this.G
   const HongKong = G.makeLatLng('22.286394','114.149139');
 
   G.map = new google.maps.Map(G.mapEl, {
@@ -1093,7 +1094,7 @@ FynViewModel.prototype.initApp = () => {
 }
 
 FynViewModel.prototype.testFeature = function(test) {
-  console.log(testing something out);
+  console.log('testing something out');
 }
 
 const fyn = new FynViewModel()

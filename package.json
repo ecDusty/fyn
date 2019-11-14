@@ -4,7 +4,8 @@
   "description": "Neighborhood map web application.",
   "main": "gulpfile.js",
   "scripts": {
-    "G": "gulp"
+    "G": "gulp --env=test",
+    "build": "gulp --env=build"
   },
   "repository": {
     "type": "git",
@@ -20,8 +21,12 @@
     "@babel/core": "^7.7.2",
     "@babel/preset-env": "^7.7.1",
     "babel": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-eslint": "^6.0.0",
     "gulp-plumber": "^1.2.1",
     "gulp-sass": "^4.0.2",
+    "minimist": "^1.2.0",
     "node-sass": "^4.13.0"
   }
 }
